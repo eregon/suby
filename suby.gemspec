@@ -4,5 +4,8 @@ Gem::Specification.new do |s|
   s.description = "Find and download subtitles"
   s.author = 'eregon'
 
-  s.version = '0.0.1'
+  s.files = Dir['bin/*']
+  s.executables = ['suby']
+
+  s.version = '0.0.3'
 end
