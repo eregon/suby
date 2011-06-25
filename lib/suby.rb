@@ -23,10 +23,9 @@ module Suby
     return puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
       File.exist? File.basename(file, File.extname(file)) + ".#{ext}" }
 
-    unless /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2}) - .+\.[a-z]+?$/ =~ file
-      return puts "wrong file format (#{file}). Must be:\n<show> <season>x<episode> - <title>.<ext>"
-    end
-    season, episode = [season, episode].map(&:to_i)
+    show, season, episode = parse_filename(file)
+    return unless show
+
     puts "Searching subtitles for #{file}:"
     puts "Show: #{show}, Season: #{season}, Episode: #{episode}"
 
@@ -96,5 +95,13 @@ module Suby
     # Cleaning
     File.unlink archive
     subs
+  end
+
+  def parse_filename(file)
+    if /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2}) - .+\.[a-z]+?$/ =~ file
+      [show, season.to_i, episode.to_i]
+    else
+      puts "wrong file format (#{file}). Must be:\n<show> <season>x<episode> - <title>.<ext>"
+    end
   end
 end
