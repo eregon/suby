@@ -23,6 +23,4 @@ option_parser.parse!
 
 puts option_parser if ARGV.empty?
 
-ARGV.each do |file|
-  Suby.download_subtitles file, options
-end
+Suby.download_subtitles ARGV, options
