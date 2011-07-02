@@ -7,5 +7,8 @@ Gem::Specification.new do |s|
   s.files = Dir['bin/*'] + Dir['lib/**/*.rb'] + %w[.gitignore README.md suby.gemspec]
   s.executables = ['suby']
 
+  s.required_ruby_version = '>= 1.9.2'
+  s.add_dependency 'nokogiri'
+
   s.version = '0.0.5'
 end
