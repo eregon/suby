@@ -21,7 +21,8 @@ module Suby
       begin
         Downloader.new(file, options[:lang]).download
       rescue
-        raise $!
+        puts "  The download of the subtitles failed for #{file}:"
+        puts "  #{$!.inspect}"
       end
     }
   end
