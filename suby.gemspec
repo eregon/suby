@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.description = "Find and download subtitles"
   s.author = 'eregon'
 
-  s.files = Dir['bin/*'] + Dir['lib/**/*.rb'] + %w[.gitignore README.md suby.gemspec]
+  s.files = Dir['bin/*', 'lib/**/*.rb', '.gitignore', 'README.md', 'suby.gemspec']
   s.executables = ['suby']
 
   s.required_ruby_version = '>= 1.9.2'
