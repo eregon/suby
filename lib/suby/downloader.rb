@@ -38,10 +38,10 @@ module Suby
 
     def episode_url
       @episode_url ||= begin
-        show_page = (SHOW_PAGES[show] ||= Nokogiri http.get(show_url).body)
+        SHOW_PAGES[show] ||= Nokogiri http.get(show_url).body
 
         url = nil
-        show_page.css('div.left_articles table tr').find { |tr|
+        SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
           tr.children.find { |td| td.name == 'td' && td.text =~ /\A#{season}x0?#{episode}\z/ }
         }.children.find { |td|
           td.children.find { |a|
