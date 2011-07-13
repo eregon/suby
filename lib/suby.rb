@@ -3,16 +3,10 @@ require_relative 'suby/downloader'
 module Suby
   extend self
 
-  DEFAULT_OPTIONS = {
-    lang: 'en'
-  }
-
   SUB_EXTENSIONS = %w[srt sub]
   TEMP_ARCHIVE_NAME = '__archive__'
 
   def download_subtitles(files, options = {})
-    options = DEFAULT_OPTIONS.merge options
-
     files.each { |file|
       next if SUB_EXTENSIONS.include? File.extname(file)
       next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|

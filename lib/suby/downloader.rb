@@ -12,8 +12,8 @@ module Suby
 
     attr_reader :show, :season, :episode, :file, :lang
 
-    def initialize file, lang = 'en'
-      @file, @lang = file, lang
+    def initialize file, lang = nil
+      @file, @lang = file, lang || 'en'
       unless /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2})(?: - .+)?\.[a-z]+?$/ =~ file
         raise "wrong file format (#{file}). Must be:\n<show> <season>x<episode>[ - <title>].<ext>"
       end
