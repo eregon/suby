@@ -22,7 +22,8 @@ module Suby
         Downloader.new(file, options[:lang]).download
       rescue
         puts "  The download of the subtitles failed for #{file}:"
-        puts "  #{$!.inspect}"
+        puts "  #{$!.class}: #{$!.message}"
+        puts $!.backtrace.map { |line| line.prepend ' '*4 }
       end
     }
   end
