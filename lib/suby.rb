@@ -13,7 +13,7 @@ module Suby
         File.exist? File.basename(file, File.extname(file)) + ".#{ext}" }
 
       begin
-        Downloader.new(file, options[:lang]).download
+        Downloader::TVSubtitles.new(file, options[:lang]).download
       rescue
         puts "  The download of the subtitles failed for #{file}:"
         puts "  #{$!.class}: #{$!.message}"

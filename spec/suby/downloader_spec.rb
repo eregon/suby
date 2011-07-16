@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 
 describe Suby::Downloader do
-  Downloader = Suby::Downloader
+  Downloader = Suby::Downloader::TVSubtitles
   show = 'How I Met Your Mother'
   season, episode = 3, 9
   title = 'Slapsgiving'
