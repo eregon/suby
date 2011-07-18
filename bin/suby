@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'suby'
+require_relative '../lib/suby'
 require 'optparse'
 
 options = {}
