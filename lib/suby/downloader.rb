@@ -18,23 +18,19 @@ module Suby
     end
 
     def download
-      puts "Searching subtitles for #{file}:"
-      puts "Show: #{show}, Season: #{season}, Episode: #{episode}"
+      rename extract download_url
+    end
 
-      puts "show url: #{show_url}"
-      puts "episode url: #{episode_url}"
-      puts "subtitle url: #{subtitles_url}"
-      puts "download url: #{download_url}"
-
-      # extract
-      zip = http.get(download_url).body
+    def extract url
+      zip = http.get(url).body
       http.finish
       open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write zip }
-      subs = Suby.extract_subs_from_archive(TEMP_ARCHIVE_NAME)
+      Suby.extract_subs_from_archive(TEMP_ARCHIVE_NAME)
+    end
 
+    def rename subs
       new_name = File.basename(file, File.extname(file))+File.extname(subs.first)
       File.rename subs.first, new_name
-      puts "Renaming to #{new_name}"
     end
   end
 end
