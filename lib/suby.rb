@@ -29,7 +29,7 @@ module Suby
       raise "no subtitles in #{archive}" if subs.empty?
       subs_for_unzip = subs.map { |sub| sub.gsub(/(\[|\])/) { "\\#{$1}" } }
       system 'unzip', archive, *subs_for_unzip, 1 => :close
-      puts "found subtitles: #{subs.join(', ')}"
+      puts "found subtitles: #{subs.join(', ')}" if $VERBOSE
     else
       raise "unknown archive type (#{archive})"
     end
