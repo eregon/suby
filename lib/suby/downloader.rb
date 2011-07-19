@@ -1,16 +1,17 @@
 require 'net/http'
+require 'cgi/util'
 require 'nokogiri'
 
 module Suby
   class Downloader
-    attr_reader :show, :season, :episode, :file, :lang
+    attr_reader :show, :season, :episode, :title, :file, :lang
 
     def initialize file, lang = nil
-      @file, @lang = file, lang || 'en'
-      unless /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2})(?: - .+)?\.[a-z]+?$/ =~ file
+      @file, @lang = file, (lang || 'en').to_sym
+      unless /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2})(?: - (?<title>.+))?\.[a-z]+?$/ =~ file
         raise "wrong file format (#{file}). Must be:\n<show> <season>x<episode>[ - <title>].<ext>"
       end
-      @show, @season, @episode = show, season.to_i, episode.to_i
+      @show, @season, @episode, @title = show, season.to_i, episode.to_i, title
     end
 
     def http
