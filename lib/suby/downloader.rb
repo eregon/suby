@@ -18,19 +18,24 @@ module Suby
     end
 
     def download
-      rename extract download_url
+      extract download_url
     end
 
     def extract url
-      zip = http.get(url).body
+      contents = http.get(url).body
       http.finish
-      open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write zip }
-      Suby.extract_subs_from_archive(TEMP_ARCHIVE_NAME)
+      format = self.class::FORMAT
+      if format == :file
+        open(sub_name(url), 'wb') { |f| f.write contents }
+      else
+        open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
+        sub = Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format)
+        File.rename sub, sub_name(sub)
+      end
     end
 
-    def rename subs
-      new_name = File.basename(file, File.extname(file))+File.extname(subs.first)
-      File.rename subs.first, new_name
+    def sub_name sub
+      File.basename(file, File.extname(file)) + File.extname(sub)
     end
   end
 end

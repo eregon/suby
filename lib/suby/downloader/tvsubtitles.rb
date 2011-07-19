@@ -1,6 +1,7 @@
 module Suby
   class Downloader::TVSubtitles < Downloader
     SITE = 'www.tvsubtitles.net'
+    FORMAT = :zip
     SEARCH_URL = '/search.php'
 
     # cache

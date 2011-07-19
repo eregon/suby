@@ -22,20 +22,20 @@ module Suby
     }
   end
 
-  def extract_subs_from_archive(archive)
-    case `file #{archive}`
-    when /Zip archive data/
-      subs = `unzip -qql #{archive}`.scan(/\d{2}:\d{2}   (.+?(?:#{SUB_EXTENSIONS.join '|'}))$/).map(&:first)
-      raise "no subtitles in #{archive}" if subs.empty?
-      subs_for_unzip = subs.map { |sub| sub.gsub(/(\[|\])/) { "\\#{$1}" } }
-      system 'unzip', archive, *subs_for_unzip, 1 => :close
-      puts "found subtitles: #{subs.join(', ')}" if $VERBOSE
+  def extract_sub_from_archive(archive, format)
+    case format
+    when :zip
+      sub = `unzip -qql #{archive}`.scan(/\d{2}:\d{2}   (.+?(?:#{SUB_EXTENSIONS.join '|'}))$/).map(&:first).first
+      raise "no subtitles in #{archive}" unless sub
+      sub_for_unzip = sub.gsub(/(\[|\])/) { "\\#{$1}" }
+      system 'unzip', archive, sub_for_unzip, 1 => :close
+      puts "found subtitle: #{sub}" if $VERBOSE
     else
       raise "unknown archive type (#{archive})"
     end
 
     # Cleaning
     File.unlink archive
-    subs
+    sub
   end
 end
