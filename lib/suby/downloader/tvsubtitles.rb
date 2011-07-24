@@ -22,7 +22,7 @@ module Suby
 
     def episode_url
       @episode_url ||= begin
-        SHOW_PAGES[show] ||= Nokogiri http.get(show_url).body
+        SHOW_PAGES[show] ||= Nokogiri get show_url
 
         url = nil
         SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
@@ -39,7 +39,7 @@ module Suby
 
     def subtitles_url
       @subtitles_url ||= begin
-        subtitles = Nokogiri http.get(episode_url).body
+        subtitles = Nokogiri get episode_url
 
         # TODO: choose 720p or most downloaded instead of first found
         url = subtitles.css('div.left_articles a').find { |a| a.name == 'a' && a[:href].start_with?('/subtitle') }[:href]
@@ -49,7 +49,7 @@ module Suby
     end
 
     def download_url
-      @download_url ||= URI.escape '/' + http.get(subtitles_url.sub('subtitle', 'download'))['Location']
+      @download_url ||= URI.escape '/' + get_redirection(subtitles_url.sub('subtitle', 'download'))
     end
   end
 end

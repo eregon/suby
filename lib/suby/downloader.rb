@@ -23,12 +23,24 @@ module Suby
       @http ||= Net::HTTP.new(self.class::SITE).start
     end
 
+    def get path, initheader = {}
+      response = http.get(path, initheader)
+      raise "Invalid response for #{path}: #{response}" unless Net::HTTPSuccess === response
+      response.body
+    end
+
+    def get_redirection path, initheader = {}
+      response = http.get(path, initheader)
+      raise "Invalid response for #{path}: #{response}" unless Net::HTTPFound === response
+      response['Location']
+    end
+
     def download
       extract download_url
     end
 
     def extract url
-      contents = http.get(url).body
+      contents = get(url)
       http.finish
       format = self.class::FORMAT
       if format == :file
