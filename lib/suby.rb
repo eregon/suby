@@ -19,6 +19,7 @@ module Suby
             downloader.new(file, options[:lang]).download
           rescue # FIXME: rescue only expected errors
             puts "#{downloader} did not find subtitles for #{file}"
+            raise $! if $DEBUG
           else
             puts "#{downloader} found subtitles for #{file}"
             found = true
