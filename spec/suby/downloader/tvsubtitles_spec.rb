@@ -2,8 +2,8 @@ require_relative '../../spec_helper'
 
 describe Suby::Downloader::TVSubtitles do
   file = 'How I Met Your Mother 3x9 - Slapsgiving.mkv'
-  downloader = Downloader::TVSubtitles.new(file)
-  downloader_fr = Downloader::TVSubtitles.new(file, :fr)
+  downloader = Suby::Downloader::TVSubtitles.new(file)
+  downloader_fr = Suby::Downloader::TVSubtitles.new(file, :fr)
 
   it 'finds the right show url' do
     downloader.show_url.should == '/tvshow-110-3.html'
