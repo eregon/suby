@@ -4,6 +4,11 @@ require 'nokogiri'
 
 module Suby
   class Downloader
+    DOWNLOADERS = []
+    def self.inherited subclass
+      DOWNLOADERS << subclass
+    end
+
     attr_reader :show, :season, :episode, :title, :file, :lang
 
     def initialize file, lang = nil
@@ -42,3 +47,4 @@ module Suby
 end
 
 require_relative 'downloader/tvsubtitles'
+require_relative 'downloader/addic7ed'

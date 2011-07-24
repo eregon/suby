@@ -12,12 +12,15 @@ module Suby
       next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
         File.exist? File.basename(file, File.extname(file)) + ".#{ext}" }
 
-      begin
-        Downloader::TVSubtitles.new(file, options[:lang]).download
-      rescue
-        puts "  The download of the subtitles failed for #{file}:"
-        puts "  #{$!.class}: #{$!.message}"
-        puts $!.backtrace.map { |line| line.prepend ' '*4 }
+      Downloader::DOWNLOADERS.each do |downloader|
+        begin
+          downloader.new(file, options[:lang]).download
+          break
+        rescue
+          puts "  The download of the subtitles failed for #{file}:"
+          puts "  #{$!.class}: #{$!.message}"
+          puts $!.backtrace.map { |line| line.prepend ' '*4 }
+        end
       end
     }
   end
