@@ -10,11 +10,11 @@ module Suby
       DOWNLOADERS << subclass
     end
 
-    attr_reader :show, :season, :episode, :title, :file, :lang
+    attr_reader :show, :season, :episode, :file, :lang
 
     def initialize(file, lang = nil)
       @file, @lang = file, (lang || 'en').to_sym
-      @show, @season, @episode, @title = FilenameParser.parse(file)
+      @show, @season, @episode = FilenameParser.parse(file)
     end
 
     def http
