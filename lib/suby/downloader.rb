@@ -31,8 +31,11 @@ module Suby
 
     def get_redirection path, initheader = {}
       response = http.get(path, initheader)
-      raise "Invalid response for #{path}: #{response}" unless Net::HTTPFound === response
-      response['Location']
+      location = response['Location']
+      unless (Net::HTTPFound === response or Net::HTTPSuccess === response) and location
+        raise "Invalid response for #{path}: #{response}"
+      end
+      location
     end
 
     def download
