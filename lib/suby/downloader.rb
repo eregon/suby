@@ -6,13 +6,13 @@ require_relative 'filename_parser'
 module Suby
   class Downloader
     DOWNLOADERS = []
-    def self.inherited subclass
+    def self.inherited(subclass)
       DOWNLOADERS << subclass
     end
 
     attr_reader :show, :season, :episode, :title, :file, :lang
 
-    def initialize file, lang = nil
+    def initialize(file, lang = nil)
       @file, @lang = file, (lang || 'en').to_sym
       @show, @season, @episode, @title = FilenameParser.parse(file)
     end
@@ -21,13 +21,13 @@ module Suby
       @http ||= Net::HTTP.new(self.class::SITE).start
     end
 
-    def get path, initheader = {}
+    def get(path, initheader = {})
       response = http.get(path, initheader)
       raise "Invalid response for #{path}: #{response}" unless Net::HTTPSuccess === response
       response.body
     end
 
-    def get_redirection path, initheader = {}
+    def get_redirection(path, initheader = {})
       response = http.get(path, initheader)
       location = response['Location']
       unless (Net::HTTPFound === response or Net::HTTPSuccess === response) and location
@@ -40,7 +40,7 @@ module Suby
       extract download_url
     end
 
-    def extract url
+    def extract(url)
       contents = get(url)
       http.finish
       format = self.class::FORMAT
@@ -53,7 +53,7 @@ module Suby
       end
     end
 
-    def sub_name sub
+    def sub_name(sub)
       File.basename(file, File.extname(file)) + File.extname(sub)
     end
   end
