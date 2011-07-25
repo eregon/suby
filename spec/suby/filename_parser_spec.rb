@@ -13,10 +13,7 @@ describe Suby::Downloader do
       "#{show} #{season}x#{episode} - #{title}#{ext}",
       "#{show} #{season}x#{"%.2d" % episode} - #{title}#{ext}"
     ].each { |filename|
-      downloader = Suby::Downloader.new(filename)
-      downloader.show.should == show
-      downloader.season.should == season
-      downloader.episode.should == episode
+      Suby::FilenameParser.parse(filename).should == [show, season, episode]
     }
   end
 end

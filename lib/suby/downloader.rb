@@ -1,6 +1,7 @@
 require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
+require_relative 'filename_parser'
 
 module Suby
   class Downloader
@@ -13,10 +14,7 @@ module Suby
 
     def initialize file, lang = nil
       @file, @lang = file, (lang || 'en').to_sym
-      unless /^(?<show>.+) (?<season>\d{1,2})x(?<episode>\d{1,2})(?: - (?<title>.+))?\.[a-z]+?$/ =~ file
-        raise "wrong file format (#{file}). Must be:\n<show> <season>x<episode>[ - <title>].<ext>"
-      end
-      @show, @season, @episode, @title = show, season.to_i, episode.to_i, title
+      @show, @season, @episode, @title = FilenameParser.parse(file)
     end
 
     def http
