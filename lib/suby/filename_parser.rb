@@ -95,11 +95,9 @@ module Suby
     #   clean_show_name("an.example.1.0.test") # => "an example 1.0 test"
     #   clean_show_name("an_example_1.0_test") # => "an example 1.0 test"
     def clean_show_name show
-      show.gsub! /(\D)[.](\D)/, '\1 \2'
-      show.gsub! /(\D)[.]/, '\1 '
-      show.gsub! /[.](\D)/, ' \1'
+      show.gsub! /(?<!\d)[.]|[.](?!\d)/, ' '
       show.tr! '_', ' '
-      show.sub! /-$/, ''
+      show.chomp! '-'
       show.strip!
       show
     end
