@@ -31,7 +31,7 @@ module Suby
       response = http.get(path, initheader)
       location = response['Location']
       unless (Net::HTTPFound === response or Net::HTTPSuccess === response) and location
-        raise "Invalid response for #{path}: #{response}"
+        raise "Invalid response for #{path}: #{response}: location: #{location.inspect}"
       end
       location
     end
