@@ -5,7 +5,7 @@ module Suby
     # from tvnamer @ ab2c6c, with author's agreement, adapted
     # See https://github.com/dbr/tvnamer/blob/master/tvnamer/config_defaults.py
     FILENAME_PATTERNS = [
-      # foo.s0101, foo.0201
+      # foo.s0101
       /^(?<show>.+?)
       [ \._\-]
       [Ss](?<season>[0-9]{2})
