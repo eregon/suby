@@ -4,12 +4,18 @@ module Suby
     FORMAT = :file
     LANG_IDS = {
       en: 1,
+      es: 5,
       fr: 8
     }
+    FILTER_IGNORED = "Couldn't find any subs with the specified language. Filter ignored"
 
     def download_url
       subtitles_url = "/serie/#{CGI.escape show}/#{season}/#{episode}/#{LANG_IDS[lang]}"
-      download_url = Nokogiri(get(subtitles_url)).css('a').find { |a|
+      response = http.get(subtitles_url)
+      throw :downloader, "show/season/episode not found" unless Net::HTTPSuccess === response
+      body = response.body
+      throw :downloader, "no subtitle available" if body.include? FILTER_IGNORED
+      download_url = Nokogiri(body).css('a').find { |a|
         a[:href].start_with? '/original/' or
         a[:href].start_with? '/updated/'
       }[:href]
