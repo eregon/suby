@@ -16,14 +16,14 @@ module Suby
         success = Downloader::DOWNLOADERS.find do |downloader|
           error = catch :downloader do
             downloader.new(file, options[:lang]).download
-            nil
+            :success
           end
-          if error
-            puts "#{downloader} did not find subtitles for #{file} (#{error})"
-          else
+          if error == :success
             puts "#{downloader} found subtitles for #{file}"
+          else
+            puts "#{downloader} did not find subtitles for #{file} (#{error})"
           end
-          error.nil?
+          error == :success
         end
         STDERR.puts "No downloader could find subtitles for #{file}" unless success
       rescue
