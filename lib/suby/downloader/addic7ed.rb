@@ -14,7 +14,7 @@ module Suby
         a[:href].start_with? '/updated/'
       }[:href]
       location = get_redirection download_url, 'Referer' => "http://#{SITE}#{subtitles_url}" # They check Referer
-      raise "Download exceeded" if location == '/downloadexceeded.php'
+      throw :downloader, "download exceeded" if location == '/downloadexceeded.php'
       URI.escape location
     end
   end

@@ -24,7 +24,7 @@ module Suby
           end
           error.nil?
         end
-        raise "Not found" unless success
+        STDERR.puts "No downloader could find subtitles for #{file}" unless success
       rescue
         puts "  The download of the subtitles failed for #{file}:"
         puts "  #{$!.class}: #{$!.message}"
