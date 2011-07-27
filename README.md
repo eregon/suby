@@ -2,7 +2,7 @@
 
 Find and download subtitles
 
-suby is a little script to find and download subtitles for TV series
+`suby` is a little script to find and download subtitles for TV series
 
 ## Install
 
@@ -10,14 +10,18 @@ suby is a little script to find and download subtitles for TV series
 
 ## Synopsis
 
-    suby 'my show 1x01 - Pilot.avi' # => Downloads my show 1x01 - Pilot.srt
+    suby 'My Show 1x01 - Pilot.avi' # => Downloads 'My Show 1x01 - Pilot.srt'
 
-## Status
+## Features
 
-Under heavy development.
+* Parse filename to detect show, season and episode
+* Search and download appropriate subtitle, extracting it from the archive and renaming it
+* Accept a lang option (defaults to en)
+* Try multiple sites, falling back on the next one if it was not found on the current
+* Detailed error messages
 
-* Currently only accept one format for input.  
-  You could use [tvnamer](https://github.com/dbr/tvnamer) to rename the video files before.
+## TODO
 
-* Search only on tvsubtitles.net.  
-  Many series have subtitles there, but not all.
+* usual movies support (via opensubtitles.org)
+* multi-episodes support
+* choose wiser the right subtitle if many are available
