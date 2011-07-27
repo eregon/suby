@@ -6,7 +6,11 @@ describe Suby::Downloader::TVSubtitles do
   downloader_fr = Suby::Downloader::TVSubtitles.new(file, :fr)
 
   it 'finds the right show url' do
-    downloader.show_url.should == '/tvshow-110-3.html'
+    downloader.show_url.should == '/tvshow-110.html'
+  end
+
+  it 'finds the right season url' do
+    downloader.season_url.should == '/tvshow-110-3.html'
   end
 
   it 'finds the right episode url' do
@@ -27,6 +31,11 @@ describe Suby::Downloader::TVSubtitles do
   it 'fails gently when the show does not exist' do
     d = Suby::Downloader::TVSubtitles.new('Not Existing Show 1x1.mkv')
     -> { d.show_url }.should throw_symbol(:downloader, "show not found")
+  end
+
+  it 'fails gently when the season does not exist' do
+    d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 99x1.mkv')
+    -> { d.episode_url }.should throw_symbol(:downloader, "season not found")
   end
 
   it 'fails gently when the episode does not exist' do

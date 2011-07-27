@@ -21,13 +21,22 @@ module Suby
         url = a[:href]
 
         raise 'could not find the show' unless /^\/tvshow-(\d+)\.html$/ =~ url
-        "/tvshow-#{$1}-#{season}.html"
+        "/tvshow-#{$1}.html"
       end
+    end
+
+    def season_url
+      show_url.sub(/\.html$/, "-#{season}.html")
     end
 
     def episode_url
       @episode_url ||= begin
-        SHOW_PAGES[show] ||= Nokogiri get show_url
+        SHOW_PAGES[show] ||= Nokogiri get season_url
+
+        season_text = /^Season #{season}$/
+        SHOW_PAGES[show].css('div.left_articles p.description b').find { |b|
+          b.text =~ season_text
+        } or throw :downloader, "season not found"
 
         url = nil
         SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
