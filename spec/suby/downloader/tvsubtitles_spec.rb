@@ -23,4 +23,19 @@ describe Suby::Downloader::TVSubtitles do
     downloader.download_url.should == '/files/How%20I%20Met%20Your%20Mother_3x09_en.zip'
     downloader_fr.download_url.should == '/files/How%20I%20Met%20Your%20Mother_3x09_fr.zip'
   end
+
+  it 'fails gently when the show does not exist' do
+    d = Suby::Downloader::TVSubtitles.new('Not Existing Show 1x1.mkv')
+    -> { d.show_url }.should throw_symbol(:downloader, "show not found")
+  end
+
+  it 'fails gently when the episode does not exist' do
+    d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 3x99.mkv')
+    -> { d.episode_url }.should throw_symbol(:downloader, "episode not found")
+  end
+
+  it 'fails gently when there is no subtitles available' do
+    d = Suby::Downloader::TVSubtitles.new('Batman: The Animated Series 1x03.mkv')
+    -> { d.subtitles_url }.should throw_symbol(:downloader, "no subtitle available")
+  end
 end

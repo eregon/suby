@@ -13,20 +13,18 @@ module Suby
         File.exist? File.basename(file, File.extname(file)) + ".#{ext}" }
 
       begin
-        found = false
-        Downloader::DOWNLOADERS.each do |downloader|
-          begin
+        success = Downloader::DOWNLOADERS.find do |downloader|
+          error = catch :downloader do
             downloader.new(file, options[:lang]).download
-          rescue # FIXME: rescue only expected errors
-            puts "#{downloader} did not find subtitles for #{file}"
-            raise $! if $DEBUG
+          end
+          if error
+            puts "#{downloader} did not find subtitles for #{file} (#{error})"
           else
             puts "#{downloader} found subtitles for #{file}"
-            found = true
-            break
           end
+          error.nil?
         end
-        raise "Not found" unless found
+        raise "Not found" unless success
       rescue
         puts "  The download of the subtitles failed for #{file}:"
         puts "  #{$!.class}: #{$!.message}"

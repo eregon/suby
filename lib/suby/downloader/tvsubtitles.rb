@@ -13,7 +13,12 @@ module Suby
         post = Net::HTTP::Post.new(SEARCH_URL)
         post.form_data = { 'q' => show }
         results = Nokogiri http.request(post).body
-        url = results.css('ul li div a').first[:href]
+        a = results.css('ul li div a').find { |a|
+           # "Show (2009-2011)" => "Show"
+          a.text.sub(/ \(\d{4}-\d{4}\)$/, '').casecmp(show) == 0
+        }
+        throw :downloader, "show not found" unless a
+        url = a[:href]
 
         raise 'could not find the show' unless /^\/tvshow-(\d+)\.html$/ =~ url
         "/tvshow-#{$1}-#{season}.html"
@@ -27,6 +32,8 @@ module Suby
         url = nil
         SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
           tr.children.find { |td| td.name == 'td' && td.text =~ /\A#{season}x0?#{episode}\z/ }
+        }.tap { |tr|
+          throw :downloader, "episode not found" unless tr
         }.children.find { |td|
           td.children.find { |a|
             a.name == 'a' && a[:href].start_with?('episode') && url = a[:href]
@@ -42,7 +49,9 @@ module Suby
         subtitles = Nokogiri get episode_url
 
         # TODO: choose 720p or most downloaded instead of first found
-        url = subtitles.css('div.left_articles a').find { |a| a.name == 'a' && a[:href].start_with?('/subtitle') }[:href]
+        a = subtitles.css('div.left_articles a').find { |a| a.name == 'a' && a[:href].start_with?('/subtitle') }
+        throw :downloader, "no subtitle available" unless a
+        url = a[:href]
         raise 'invalid subtitle url' unless url =~ /^\/subtitle-(\d+)\.html/
         url
       end
