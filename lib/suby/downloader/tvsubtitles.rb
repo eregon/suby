@@ -39,11 +39,11 @@ module Suby
         } or raise NotFoundError, "season not found"
 
         url = nil
-        SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
+        row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
           tr.children.find { |td| td.name == 'td' && td.text =~ /\A#{season}x0?#{episode}\z/ }
-        }.tap { |tr|
-          raise NotFoundError, "episode not found" unless tr
-        }.children.find { |td|
+        }
+        raise NotFoundError, "episode not found" unless row
+        row.children.find { |td|
           td.children.find { |a|
             a.name == 'a' && a[:href].start_with?('episode') && url = a[:href]
           }
