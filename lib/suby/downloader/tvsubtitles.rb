@@ -48,14 +48,14 @@ module Suby
 
         url = nil
         row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
-          tr.children.find { |td| td.name == 'td' &&
+          tr.children.find { |td| td.name == 'td' and
                                   td.text =~ /\A#{season}x0?#{episode}\z/ }
         }
         raise NotFoundError, "episode not found" unless row
 
         row.children.find { |td|
           td.children.find { |a|
-            a.name == 'a' && a[:href].start_with?('episode') && url = a[:href]
+            a.name == 'a' and a[:href].start_with?('episode') and url = a[:href]
           }
         }
         unless url =~ /^episode-(\d+)\.html$/
@@ -72,7 +72,7 @@ module Suby
 
         # TODO: choose 720p or most downloaded instead of first found
         a = subtitles.css('div.left_articles a').find { |a|
-          a.name == 'a' && a[:href].start_with?('/subtitle')
+          a.name == 'a' and a[:href].start_with?('/subtitle')
         }
         raise NotFoundError, "no subtitle available" unless a
         url = a[:href]
