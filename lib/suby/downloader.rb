@@ -49,7 +49,7 @@ module Suby
       unless (Net::HTTPFound === response or
               Net::HTTPSuccess === response) and location
         raise DownloaderError, "Invalid response for #{path}: " +
-                               "#{response}: location: #{location.inspect}"
+                               "#{response}: location: #{location.inspect}, #{response.body}"
       end
       location
     end
