@@ -55,7 +55,7 @@ module Suby
     when :zip
       Zip::ZipFile.open(archive) { |zip|
         sub = zip.entries.find { |entry|
-          entry.to_s =~ /\.(?:#{SUB_EXTENSIONS.join '|'})$/
+          entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
         }
         raise "no subtitles in #{archive}" unless sub
         name = basename + File.extname(sub.to_s)
