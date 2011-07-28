@@ -34,9 +34,10 @@ module Suby
         SHOW_PAGES[show] ||= Nokogiri get season_url
 
         season_text = /^Season #{season}$/
-        SHOW_PAGES[show].css('div.left_articles p.description b').find { |b|
+        has_season = SHOW_PAGES[show].css('div.left_articles p.description b').find { |b|
           b.text =~ season_text
-        } or raise NotFoundError, "season not found"
+        }
+        raise NotFoundError, "season not found" unless has_season
 
         url = nil
         row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
