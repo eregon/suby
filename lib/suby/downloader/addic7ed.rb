@@ -17,7 +17,7 @@ module Suby
     end
 
     def subtitles_response
-      response = http.get(subtitles_url)
+      response = get(subtitles_url, {}, false)
       unless Net::HTTPSuccess === response
         raise NotFoundError, "show/season/episode not found"
       end

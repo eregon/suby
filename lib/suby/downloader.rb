@@ -21,12 +21,16 @@ module Suby
       @http ||= Net::HTTP.new(self.class::SITE).start
     end
 
-    def get(path, initheader = {})
+    def get(path, initheader = {}, parse_response = true)
       response = http.get(path, initheader)
-      unless Net::HTTPSuccess === response
-        raise DownloaderError, "Invalid response for #{path}: #{response}"
+      if parse_response
+        unless Net::HTTPSuccess === response
+          raise DownloaderError, "Invalid response for #{path}: #{response}"
+        end
+        response.body
+      else
+        response
       end
-      response.body
     end
 
     def post(path, data = {}, initheader = {})
