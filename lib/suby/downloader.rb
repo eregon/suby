@@ -23,7 +23,7 @@ module Suby
 
     def get(path, initheader = {})
       response = http.get(path, initheader)
-      raise "Invalid response for #{path}: #{response}" unless Net::HTTPSuccess === response
+      raise DownloaderError, "Invalid response for #{path}: #{response}" unless Net::HTTPSuccess === response
       response.body
     end
 
@@ -31,7 +31,7 @@ module Suby
       response = http.get(path, initheader)
       location = response['Location']
       unless (Net::HTTPFound === response or Net::HTTPSuccess === response) and location
-        raise "Invalid response for #{path}: #{response}: location: #{location.inspect}"
+        raise DownloaderError, "Invalid response for #{path}: #{response}: location: #{location.inspect}"
       end
       location
     end
