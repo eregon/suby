@@ -6,7 +6,7 @@ describe Suby do
   file = 'How I Met Your Mother 3x9 - Slapsgiving.mkv'
   srt  = 'How I Met Your Mother 3x9 - Slapsgiving.srt'
 
-  it 'works :D' do
+  it 'works :D', full: true do
     Dir.mktmpdir do |dir|
       suby = File.expand_path('../../bin/suby', __FILE__)
       Dir.chdir(dir) do
