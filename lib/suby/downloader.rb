@@ -62,12 +62,15 @@ module Suby
       contents = get(url)
       http.finish
       format = self.class::FORMAT
-      if format == :file
+      case format
+      when :file
         open(sub_name(url), 'wb') { |f| f.write contents }
-      else
+      when :zip
         open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
         sub = Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format)
         File.rename sub, sub_name(sub)
+      else
+        raise "unknown subtitles format: #{format}"
       end
     end
 
