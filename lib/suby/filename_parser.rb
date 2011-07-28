@@ -79,9 +79,10 @@ module Suby
 
     def parse(file)
       filename = File.basename(file)
-      FILENAME_PATTERNS.find { |pattern|
+      found = FILENAME_PATTERNS.find { |pattern|
         pattern =~ filename
-      } or raise "wrong file format (#{file})"
+      }
+      raise "wrong file format (#{file})" unless found
       [clean_show_name($~[:show]), $~[:season].to_i, $~[:episode].to_i]
     end
 

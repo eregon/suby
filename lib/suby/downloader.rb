@@ -68,8 +68,7 @@ module Suby
         open(sub_name(url), 'wb') { |f| f.write contents }
       when :zip
         open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
-        Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME,
-                                      format, basename)
+        Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format, basename)
       else
         raise "unknown subtitles format: #{format}"
       end
