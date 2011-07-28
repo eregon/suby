@@ -10,14 +10,18 @@ module Suby
     SHOW_URLS = {}
     SHOW_PAGES = {}
 
+    # "Show (2009-2011)" => "Show"
+    def clean_show_name show_name
+      show_name.sub(/ \(\d{4}-\d{4}\)$/, '')
+    end
+
     def show_url
       SHOW_URLS[show] ||= begin
         post = Net::HTTP::Post.new(SEARCH_URL)
         post.form_data = { 'q' => show }
         results = Nokogiri http.request(post).body
         a = results.css('ul li div a').find { |a|
-           # "Show (2009-2011)" => "Show"
-          a.text.sub(/ \(\d{4}-\d{4}\)$/, '').casecmp(show) == 0
+          clean_show_name(a.text).casecmp(show) == 0
         }
         raise NotFoundError, "show not found" unless a
         url = a[:href]
