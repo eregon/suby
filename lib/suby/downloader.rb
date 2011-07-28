@@ -38,7 +38,8 @@ module Suby
       post.form_data = data
       response = http.request(post)
       unless Net::HTTPSuccess === response
-        raise DownloaderError, "Invalid response for #{path}(#{data}): #{response}"
+        raise DownloaderError, "Invalid response for #{path}(#{data}): " +
+                               response.inspect
       end
       response.body
     end
@@ -49,7 +50,7 @@ module Suby
       unless (Net::HTTPFound === response or
               Net::HTTPSuccess === response) and location
         raise DownloaderError, "Invalid response for #{path}: " +
-                               "#{response}: location: #{location.inspect}, #{response.body}"
+              "#{response}: location: #{location.inspect}, #{response.body}"
       end
       location
     end
