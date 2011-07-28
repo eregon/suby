@@ -31,7 +31,7 @@ module Suby
 
     def episode_url
       @episode_url ||= begin
-        SHOW_PAGES[show] ||= Nokogiri get season_url
+        SHOW_PAGES[show] ||= Nokogiri(get(season_url))
 
         season_text = /^Season #{season}$/
         has_season = SHOW_PAGES[show].css('div.left_articles p.description b').find { |b|
@@ -56,7 +56,7 @@ module Suby
 
     def subtitles_url
       @subtitles_url ||= begin
-        subtitles = Nokogiri get episode_url
+        subtitles = Nokogiri(get(episode_url))
 
         # TODO: choose 720p or most downloaded instead of first found
         a = subtitles.css('div.left_articles a').find { |a| a.name == 'a' && a[:href].start_with?('/subtitle') }
