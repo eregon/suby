@@ -6,8 +6,8 @@ require_relative 'filename_parser'
 module Suby
   class Downloader
     DOWNLOADERS = []
-    def self.inherited(subclass)
-      DOWNLOADERS << subclass
+    def self.add(downloader)
+      DOWNLOADERS << downloader
     end
 
     attr_reader :show, :season, :episode, :file, :lang

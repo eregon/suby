@@ -1,5 +1,7 @@
 module Suby
   class Downloader::TVSubtitles < Downloader
+    Downloader.add(self)
+
     SITE = 'www.tvsubtitles.net'
     FORMAT = :zip
     SEARCH_URL = '/search.php'

@@ -1,5 +1,7 @@
 module Suby
   class Downloader::Addic7ed < Downloader
+    Downloader.add(self)
+
     SITE = 'www.addic7ed.com'
     FORMAT = :file
     LANG_IDS = {
