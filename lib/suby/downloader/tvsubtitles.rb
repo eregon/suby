@@ -27,7 +27,7 @@ module Suby
         url = a[:href]
 
         raise 'could not find the show' unless /^\/tvshow-(\d+)\.html$/ =~ url
-        "/tvshow-#{$1}.html"
+        url
       end
     end
 
