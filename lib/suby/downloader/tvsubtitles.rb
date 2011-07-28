@@ -43,19 +43,22 @@ module Suby
       end
     end
 
+    def find_episode_row
+      row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
+        tr.children.find { |td| td.name == 'td' and
+                                td.text =~ /\A#{season}x0?#{episode}\z/ }
+      }
+      raise NotFoundError, "episode not found" unless row
+      row
+    end
+
     def episode_url
       @episode_url ||= begin
         SHOW_PAGES[show] ||= Nokogiri(get(season_url))
         has_season?
 
         url = nil
-        row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
-          tr.children.find { |td| td.name == 'td' and
-                                  td.text =~ /\A#{season}x0?#{episode}\z/ }
-        }
-        raise NotFoundError, "episode not found" unless row
-
-        row.children.find { |td|
+        find_episode_row.children.find { |td|
           td.children.find { |a|
             a.name == 'a' and a[:href].start_with?('episode') and url = a[:href]
           }
