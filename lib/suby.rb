@@ -19,17 +19,21 @@ module Suby
           begin
             downloader.new(file, options[:lang]).download
           rescue Suby::NotFoundError => error
-            puts "#{downloader} did not find subtitles for #{file} (#{error.message})"
+            puts "#{downloader} did not find subtitles for #{file}" +
+                 " (#{error.message})"
             false
           rescue Suby::DownloaderError => error
-            puts "#{downloader} had a problem finding subtitles for #{file} (#{error.message})"
+            puts "#{downloader} had a problem finding subtitles for #{file}" +
+                 " (#{error.message})"
             false
           else
             puts "#{downloader} found subtitles for #{file}"
             true
           end
         end
-        STDERR.puts "No downloader could find subtitles for #{file}" unless success
+        unless success
+          STDERR.puts "No downloader could find subtitles for #{file}"
+        end
       rescue
         puts "  The download of the subtitles failed for #{file}:"
         puts "  #{$!.class}: #{$!.message}"
@@ -41,7 +45,9 @@ module Suby
   def extract_sub_from_archive(archive, format)
     case format
     when :zip
-      sub = `unzip -qql #{archive}`.scan(/\d{2}:\d{2}   (.+?(?:#{SUB_EXTENSIONS.join '|'}))$/).map(&:first).first
+      sub = `unzip -qql #{archive}`
+      sub = sub.scan(/\d{2}:\d{2}   (.+?(?:#{SUB_EXTENSIONS.join '|'}))$/)
+      sub = sub.map(&:first).first
       raise "no subtitles in #{archive}" unless sub
       sub_for_unzip = sub.gsub(/(\[|\])/) { "\\#{$1}" }
       system 'unzip', archive, sub_for_unzip, 1 => :close

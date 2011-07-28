@@ -36,14 +36,16 @@ module Suby
         SHOW_PAGES[show] ||= Nokogiri(get(season_url))
 
         season_text = /^Season #{season}$/
-        has_season = SHOW_PAGES[show].css('div.left_articles p.description b').find { |b|
+        bs = SHOW_PAGES[show].css('div.left_articles p.description b')
+        has_season = bs.find { |b|
           b.text =~ season_text
         }
         raise NotFoundError, "season not found" unless has_season
 
         url = nil
         row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
-          tr.children.find { |td| td.name == 'td' && td.text =~ /\A#{season}x0?#{episode}\z/ }
+          tr.children.find { |td| td.name == 'td' &&
+                                  td.text =~ /\A#{season}x0?#{episode}\z/ }
         }
         raise NotFoundError, "episode not found" unless row
 
@@ -52,7 +54,9 @@ module Suby
             a.name == 'a' && a[:href].start_with?('episode') && url = a[:href]
           }
         }
-        raise "invalid episode url: #{episode_url}" unless url =~ /^episode-(\d+)\.html$/
+        unless url =~ /^episode-(\d+)\.html$/
+          raise "invalid episode url: #{episode_url}"
+        end
 
         "/episode-#{$1}-#{lang}.html"
       end
@@ -63,7 +67,9 @@ module Suby
         subtitles = Nokogiri(get(episode_url))
 
         # TODO: choose 720p or most downloaded instead of first found
-        a = subtitles.css('div.left_articles a').find { |a| a.name == 'a' && a[:href].start_with?('/subtitle') }
+        a = subtitles.css('div.left_articles a').find { |a|
+          a.name == 'a' && a[:href].start_with?('/subtitle')
+        }
         raise NotFoundError, "no subtitle available" unless a
         url = a[:href]
         raise 'invalid subtitle url' unless url =~ /^\/subtitle-(\d+)\.html/
@@ -72,7 +78,8 @@ module Suby
     end
 
     def download_url
-      @download_url ||= URI.escape '/' + get_redirection(subtitles_url.sub('subtitle', 'download'))
+      @download_url ||= URI.escape '/' +
+                      get_redirection(subtitles_url.sub('subtitle', 'download'))
     end
   end
 end

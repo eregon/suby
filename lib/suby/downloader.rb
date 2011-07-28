@@ -23,15 +23,19 @@ module Suby
 
     def get(path, initheader = {})
       response = http.get(path, initheader)
-      raise DownloaderError, "Invalid response for #{path}: #{response}" unless Net::HTTPSuccess === response
+      unless Net::HTTPSuccess === response
+        raise DownloaderError, "Invalid response for #{path}: #{response}"
+      end
       response.body
     end
 
     def get_redirection(path, initheader = {})
       response = http.get(path, initheader)
       location = response['Location']
-      unless (Net::HTTPFound === response or Net::HTTPSuccess === response) and location
-        raise DownloaderError, "Invalid response for #{path}: #{response}: location: #{location.inspect}"
+      unless (Net::HTTPFound === response or
+              Net::HTTPSuccess === response) and location
+        raise DownloaderError, "Invalid response for #{path}: " +
+                               "#{response}: location: #{location.inspect}"
       end
       location
     end

@@ -9,7 +9,8 @@ module Suby
       es: 5,
       fr: 8
     }
-    FILTER_IGNORED = "Couldn't find any subs with the specified language. Filter ignored"
+    FILTER_IGNORED = "Couldn't find any subs with the specified language. " +
+                     "Filter ignored"
 
     def subtitles_url
       "/serie/#{CGI.escape show}/#{season}/#{episode}/#{LANG_IDS[lang]}"
@@ -17,19 +18,26 @@ module Suby
 
     def subtitles_response
       response = http.get(subtitles_url)
-      raise NotFoundError, "show/season/episode not found" unless Net::HTTPSuccess === response
+      unless Net::HTTPSuccess === response
+        raise NotFoundError, "show/season/episode not found"
+      end
       response
     end
 
     def subtitles_body
       body = subtitles_response.body
-      raise NotFoundError, "no subtitle available" if body.include? FILTER_IGNORED
+      if body.include? FILTER_IGNORED
+        raise NotFoundError, "no subtitle available"
+      end
       body
     end
 
     def redirected_url download_url
-      location = get_redirection download_url, 'Referer' => "http://#{SITE}#{subtitles_url}" # They check Referer
-      raise NotFoundError, "download exceeded" if location == '/downloadexceeded.php'
+      header = { 'Referer' => "http://#{SITE}#{subtitles_url}" }
+      location = get_redirection download_url, header # They check Referer
+      if location == '/downloadexceeded.php'
+        raise NotFoundError, "download exceeded"
+      end
       URI.escape location
     end
 
