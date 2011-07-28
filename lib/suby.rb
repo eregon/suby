@@ -1,3 +1,4 @@
+require_relative 'suby/not_found_error'
 require_relative 'suby/downloader'
 
 module Suby
@@ -14,16 +15,15 @@ module Suby
 
       begin
         success = Downloader::DOWNLOADERS.find do |downloader|
-          error = catch :downloader do
+          begin
             downloader.new(file, options[:lang]).download
-            :success
-          end
-          if error == :success
-            puts "#{downloader} found subtitles for #{file}"
+          rescue Suby::NotFoundError => error
+            puts "#{downloader} did not find subtitles for #{file} (#{error.message})"
+            false
           else
-            puts "#{downloader} did not find subtitles for #{file} (#{error})"
+            puts "#{downloader} found subtitles for #{file}"
+            true
           end
-          error == :success
         end
         STDERR.puts "No downloader could find subtitles for #{file}" unless success
       rescue

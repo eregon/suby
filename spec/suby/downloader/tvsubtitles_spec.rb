@@ -30,21 +30,21 @@ describe Suby::Downloader::TVSubtitles do
 
   it 'fails gently when the show does not exist' do
     d = Suby::Downloader::TVSubtitles.new('Not Existing Show 1x1.mkv')
-    -> { d.show_url }.should throw_symbol(:downloader, "show not found")
+    -> { d.show_url }.should raise_error(Suby::NotFoundError, "show not found")
   end
 
   it 'fails gently when the season does not exist' do
     d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 99x1.mkv')
-    -> { d.episode_url }.should throw_symbol(:downloader, "season not found")
+    -> { d.episode_url }.should raise_error(Suby::NotFoundError, "season not found")
   end
 
   it 'fails gently when the episode does not exist' do
     d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 3x99.mkv')
-    -> { d.episode_url }.should throw_symbol(:downloader, "episode not found")
+    -> { d.episode_url }.should raise_error(Suby::NotFoundError, "episode not found")
   end
 
   it 'fails gently when there is no subtitles available' do
     d = Suby::Downloader::TVSubtitles.new('Batman: The Animated Series 1x03.mkv')
-    -> { d.subtitles_url }.should throw_symbol(:downloader, "no subtitle available")
+    -> { d.subtitles_url }.should raise_error(Suby::NotFoundError, "no subtitle available")
   end
 end
