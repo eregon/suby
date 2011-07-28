@@ -35,16 +35,18 @@ module Suby
       show_url.sub(/\.html$/, "-#{season}.html")
     end
 
+    def has_season?
+      season_text = "Season #{season}"
+      bs = SHOW_PAGES[show].css('div.left_articles p.description b')
+      unless bs.find { |b| b.text == season_text }
+        raise NotFoundError, "season not found"
+      end
+    end
+
     def episode_url
       @episode_url ||= begin
         SHOW_PAGES[show] ||= Nokogiri(get(season_url))
-
-        season_text = /^Season #{season}$/
-        bs = SHOW_PAGES[show].css('div.left_articles p.description b')
-        has_season = bs.find { |b|
-          b.text =~ season_text
-        }
-        raise NotFoundError, "season not found" unless has_season
+        has_season?
 
         url = nil
         row = SHOW_PAGES[show].css('div.left_articles table tr').find { |tr|
