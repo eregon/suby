@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.2'
   s.add_dependency 'nokogiri'
+  s.add_dependency 'rubyzip'
 
   s.version = '0.0.8'
 end

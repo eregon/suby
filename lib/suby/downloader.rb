@@ -67,15 +67,19 @@ module Suby
         open(sub_name(url), 'wb') { |f| f.write contents }
       when :zip
         open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
-        sub = Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format)
-        File.rename sub, sub_name(sub)
+        Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME,
+                                      format, basename)
       else
         raise "unknown subtitles format: #{format}"
       end
     end
 
+    def basename
+      File.basename(file, File.extname(file))
+    end
+
     def sub_name(sub)
-      File.basename(file, File.extname(file)) + File.extname(sub)
+      basename + File.extname(sub)
     end
   end
 end

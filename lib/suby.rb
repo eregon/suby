@@ -1,6 +1,7 @@
 require_relative 'suby/downloader_error'
 require_relative 'suby/not_found_error'
 require_relative 'suby/downloader'
+require 'zip/zip'
 
 module Suby
   extend self
@@ -42,22 +43,22 @@ module Suby
     }
   end
 
-  def extract_sub_from_archive(archive, format)
+  def extract_sub_from_archive(archive, format, basename)
     case format
     when :zip
-      sub = `unzip -qql #{archive}`
-      sub = sub.scan(/\d{2}:\d{2}   (.+?(?:#{SUB_EXTENSIONS.join '|'}))$/)
-      sub = sub.map(&:first).first
-      raise "no subtitles in #{archive}" unless sub
-      sub_for_unzip = sub.gsub(/(\[|\])/) { "\\#{$1}" }
-      system 'unzip', archive, sub_for_unzip, 1 => :close
-      puts "found subtitle: #{sub}" if $VERBOSE
+      Zip::ZipFile.open(archive) { |zip|
+        sub = zip.entries.find { |entry|
+          entry.to_s =~ /\.(?:#{SUB_EXTENSIONS.join '|'})$/
+        }
+        raise "no subtitles in #{archive}" unless sub
+        name = basename + File.extname(sub.to_s)
+        sub.extract(name)
+      }
     else
       raise "unknown archive type (#{archive})"
     end
-
+  ensure
     # Cleaning
-    File.unlink archive
-    sub
+    File.unlink archive if File.exist? archive
   end
 end
