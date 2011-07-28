@@ -44,12 +44,14 @@ module Suby
           tr.children.find { |td| td.name == 'td' && td.text =~ /\A#{season}x0?#{episode}\z/ }
         }
         raise NotFoundError, "episode not found" unless row
+
         row.children.find { |td|
           td.children.find { |a|
             a.name == 'a' && a[:href].start_with?('episode') && url = a[:href]
           }
         }
         raise "invalid episode url: #{episode_url}" unless url =~ /^episode-(\d+)\.html$/
+
         "/episode-#{$1}-#{lang}.html"
       end
     end
