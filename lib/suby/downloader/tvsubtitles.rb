@@ -17,16 +17,14 @@ module Suby
 
     def show_url
       SHOW_URLS[show] ||= begin
-        post = Net::HTTP::Post.new(SEARCH_URL)
-        post.form_data = { 'q' => show }
-        results = Nokogiri http.request(post).body
+        results = Nokogiri(post(SEARCH_URL, 'q' => show))
         a = results.css('ul li div a').find { |a|
           clean_show_name(a.text).casecmp(show) == 0
         }
         raise NotFoundError, "show not found" unless a
         url = a[:href]
 
-        raise 'could not find the show' unless /^\/tvshow-(\d+)\.html$/ =~ url
+        raise 'invalid show url' unless /^\/tvshow-\d+\.html$/ =~ url
         url
       end
     end

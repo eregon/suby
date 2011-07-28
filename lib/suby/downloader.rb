@@ -29,6 +29,16 @@ module Suby
       response.body
     end
 
+    def post(path, data = {}, initheader = {})
+      post = Net::HTTP::Post.new(path, initheader)
+      post.form_data = data
+      response = http.request(post)
+      unless Net::HTTPSuccess === response
+        raise DownloaderError, "Invalid response for #{path}(#{data}): #{response}"
+      end
+      response.body
+    end
+
     def get_redirection(path, initheader = {})
       response = http.get(path, initheader)
       location = response['Location']
