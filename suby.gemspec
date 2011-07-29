@@ -13,5 +13,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri'
   s.add_dependency 'rubyzip'
 
-  s.version = '0.0.8'
+  s.version = '0.1.0'
 end
