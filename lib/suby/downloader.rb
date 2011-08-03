@@ -1,7 +1,6 @@
 require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
-require_relative 'filename_parser'
 
 module Suby
   class Downloader
@@ -12,9 +11,18 @@ module Suby
 
     attr_reader :show, :season, :episode, :file, :lang
 
-    def initialize(file, lang = nil)
-      @file, @lang = file, (lang || 'en').to_sym
-      @show, @season, @episode = FilenameParser.parse(file)
+    def initialize(file, *args)
+      @file = file
+      @lang = (args.last || 'en').to_sym
+      case args.size
+      when 0..1
+        @show, @season, @episode = FilenameParser.parse(file)
+      when 3..4
+        @show, @season, @episode = args
+      else
+        raise ArgumentError, "wrong number of arguments: #{args.size+1} for " +
+                             "(file, [show, season, episode], [lang])"
+      end
     end
 
     def http

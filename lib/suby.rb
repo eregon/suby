@@ -1,5 +1,6 @@
 require_relative 'suby/downloader_error'
 require_relative 'suby/not_found_error'
+require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
 require 'zip/zip'
 
@@ -20,8 +21,9 @@ module Suby
 
   def download_subtitles_for_file(file, options)
     begin
+      show, season, episode = FilenameParser.parse(file)
       success = Downloader::DOWNLOADERS.find { |downloader_class|
-        try_downloader(downloader_class.new(file, options[:lang]))
+        try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
       }
       unless success
         STDERR.puts "No downloader could find subtitles for #{file}"
