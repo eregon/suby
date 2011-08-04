@@ -26,6 +26,7 @@ module Suby
 
     def subtitles_body
       body = subtitles_response.body
+      body.strip!
       raise NotFoundError, "show/season/episode not found" if body.empty?
       if body.include? FILTER_IGNORED
         raise NotFoundError, "no subtitle available"
@@ -43,10 +44,12 @@ module Suby
     end
 
     def download_url
-      download_url = Nokogiri(subtitles_body).css('a').find { |a|
+      link = Nokogiri(subtitles_body).css('a').find { |a|
         a[:href].start_with? '/original/' or
         a[:href].start_with? '/updated/'
-      }[:href]
+      }
+      raise NotFoundError, "show/season/episode not found" unless link
+      download_url = link[:href]
 
       redirected_url download_url
     end
