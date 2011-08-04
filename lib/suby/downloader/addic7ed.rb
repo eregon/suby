@@ -26,6 +26,7 @@ module Suby
 
     def subtitles_body
       body = subtitles_response.body
+      raise NotFoundError, "show/season/episode not found" if body.empty?
       if body.include? FILTER_IGNORED
         raise NotFoundError, "no subtitle available"
       end
