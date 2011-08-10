@@ -25,6 +25,10 @@ module Suby
       end
     end
 
+    def to_s
+      self.class.name.sub(/^.+::/, '')
+    end
+
     def http
       @http ||= Net::HTTP.new(self.class::SITE).start
     end

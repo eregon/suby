@@ -3,6 +3,7 @@ require_relative 'suby/not_found_error'
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
 
+require 'term/ansicolor'
 gem 'rubyzip2'
 require 'zip'
 
@@ -24,6 +25,7 @@ module Suby
   def download_subtitles_for_file(file, options)
     begin
       show, season, episode = FilenameParser.parse(file)
+      puts file
       success = Downloader::DOWNLOADERS.find { |downloader_class|
         try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
       }
@@ -39,17 +41,16 @@ module Suby
 
   def try_downloader(downloader)
     begin
+      print "  #{downloader.to_s.ljust(20)}"
       downloader.download
     rescue Suby::NotFoundError => error
-      puts "#{downloader.class} did not find subtitles for " +
-           "#{downloader.file} (#{error.message})"
+      puts Term::ANSIColor.blue "Failed: #{error.message}"
       false
     rescue Suby::DownloaderError => error
-      puts "#{downloader.class} had a problem finding subtitles for " +
-           "#{downloader.file} (#{error.message})"
+      puts Term::ANSIColor.red "Error: #{error.message}"
       false
     else
-      puts "#{downloader.class} found subtitles for #{downloader.file}"
+      puts Term::ANSIColor.green "Found"
       true
     end
   end
