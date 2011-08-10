@@ -2,7 +2,9 @@ require_relative 'suby/downloader_error'
 require_relative 'suby/not_found_error'
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
-require 'zip/zip'
+
+gem 'rubyzip2'
+require 'zip'
 
 module Suby
   extend self
