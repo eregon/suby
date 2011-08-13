@@ -82,7 +82,7 @@ module Suby
       found = FILENAME_PATTERNS.find { |pattern|
         pattern =~ filename
       }
-      raise "wrong file format (#{file})" unless found
+      raise "Wrong file format (#{file})" unless found
       [clean_show_name($~[:show]), $~[:season].to_i, $~[:episode].to_i]
     end
 
