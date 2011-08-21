@@ -2,12 +2,13 @@ require_relative 'suby/downloader_error'
 require_relative 'suby/not_found_error'
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
+require_relative 'suby/interface'
 
-require 'term/ansicolor'
 gem 'rubyzip2'
 require 'zip'
 
 module Suby
+  include Interface
   extend self
 
   SUB_EXTENSIONS = %w[srt sub]
@@ -30,12 +31,10 @@ module Suby
       success = Downloader::DOWNLOADERS.find { |downloader_class|
         try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
       }
-      unless success
-        STDERR.puts Term::ANSIColor.red "No downloader could find subtitles for #{file}"
-      end
+      error "No downloader could find subtitles for #{file}" unless success
     rescue
-      puts Term::ANSIColor.red "  The download of the subtitles failed for #{file}:"
-      puts Term::ANSIColor.red "  #{$!.class}: #{$!.message}"
+      error "  The download of the subtitles failed for #{file}:"
+      error "  #{$!.class}: #{$!.message}"
       puts $!.backtrace.map { |line| line.prepend ' '*4 }
     end
   end
@@ -45,13 +44,13 @@ module Suby
       print "  #{downloader.to_s.ljust(20)}"
       downloader.download
     rescue Suby::NotFoundError => error
-      puts Term::ANSIColor.blue "Failed: #{error.message}"
+      failure "Failed: #{error.message}"
       false
     rescue Suby::DownloaderError => error
-      puts Term::ANSIColor.red "Error: #{error.message}"
+      error "Error: #{error.message}"
       false
     else
-      puts Term::ANSIColor.green "Found"
+      success "Found"
       true
     end
   end
