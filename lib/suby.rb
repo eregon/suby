@@ -8,7 +8,7 @@ gem 'rubyzip2'
 require 'zip'
 
 module Suby
-  SUB_EXTENSIONS = %w[srt sub]
+  SUB_EXTENSIONS = %w[srt sub].map { |ext| ".#{ext}" }
   TEMP_ARCHIVE_NAME = '__archive__'
 
   class << self
@@ -16,9 +16,9 @@ module Suby
 
     def download_subtitles(files, options = {})
       files.each { |file|
-        next if Dir.exist? file
+        next if Dir.exist?(file) or SUB_EXTENSIONS.include?(File.extname(file))
         next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
-          File.exist? File.basename(file, File.extname(file)) + ".#{ext}"
+          File.exist? File.basename(file, File.extname(file)) + ext
         }
         download_subtitles_for_file(file, options)
       }
@@ -60,7 +60,7 @@ module Suby
       when :zip
         Zip::ZipFile.open(archive) { |zip|
           sub = zip.entries.find { |entry|
-            entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
+            entry.to_s =~ /#{Regexp.union SUB_EXTENSIONS}$/
           }
           raise "no subtitles in #{archive}" unless sub
           name = basename + File.extname(sub.to_s)
