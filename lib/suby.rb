@@ -31,11 +31,11 @@ module Suby
         try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
       }
       unless success
-        STDERR.puts "No downloader could find subtitles for #{file}"
+        STDERR.puts Term::ANSIColor.red "No downloader could find subtitles for #{file}"
       end
     rescue
-      puts "  The download of the subtitles failed for #{file}:"
-      puts "  #{$!.class}: #{$!.message}"
+      puts Term::ANSIColor.red "  The download of the subtitles failed for #{file}:"
+      puts Term::ANSIColor.red "  #{$!.class}: #{$!.message}"
       puts $!.backtrace.map { |line| line.prepend ' '*4 }
     end
   end
