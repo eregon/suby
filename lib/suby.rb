@@ -15,7 +15,7 @@ module Suby
 
   def download_subtitles(files, options = {})
     files.each { |file|
-      next unless File.file? file
+      next if Dir.exist? file
       next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
         File.exist? File.basename(file, File.extname(file)) + ".#{ext}"
       }
