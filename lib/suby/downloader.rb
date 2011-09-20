@@ -71,13 +71,21 @@ module Suby
       extract download_url
     end
 
-    def extract(url)
-      contents = get(url)
+    def subtitles(url_or_response = download_url)
+      if Net::HTTPSuccess === url_or_response
+        url_or_response.body
+      else
+        get(url_or_response)
+      end
+    end
+
+    def extract(url_or_response)
+      contents = subtitles(url_or_response)
       http.finish
       format = self.class::FORMAT
       case format
       when :file
-        open(sub_name(url), 'wb') { |f| f.write contents }
+        open(sub_name(contents), 'wb') { |f| f.write contents }
       when :zip
         open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
         Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format, basename)
@@ -90,8 +98,16 @@ module Suby
       File.basename(file, File.extname(file))
     end
 
-    def sub_name(sub)
-      basename + File.extname(sub)
+    def sub_name(contents)
+      basename + sub_extension(contents)
+    end
+
+    def sub_extension(contents)
+      if contents[0..10] =~ /1\r?\n/
+        '.srt'
+      else
+        '.sub'
+      end
     end
   end
 end

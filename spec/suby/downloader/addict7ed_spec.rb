@@ -4,9 +4,9 @@ describe Suby::Downloader::Addic7ed do
   file = 'The Glee Project 01x03.avi'
   downloader = Suby::Downloader::Addic7ed.new file
 
-  it 'finds the right download url' do
+  it 'finds the right subtitles' do
     begin
-      downloader.download_url.should be_start_with "/srtcache/The%20Glee%20Project"
+      downloader.subtitles[0..100].should include "Ellis, best first kiss?"
     rescue Suby::NotFoundError => e
       if e.message == "download exceeded"
         pending e.message

@@ -36,11 +36,17 @@ module Suby
 
     def redirected_url download_url
       header = { 'Referer' => "http://#{SITE}#{subtitles_url}" }
-      location = get_redirection download_url, header # They check Referer
-      if location == '/downloadexceeded.php'
-        raise NotFoundError, "download exceeded"
+      response = get download_url, header, false
+      case response
+      when Net::HTTPSuccess
+        response
+      when Net::HTTPFound
+        location = response['Location']
+        if location == '/downloadexceeded.php'
+          raise NotFoundError, "download exceeded"
+        end
+        URI.escape location
       end
-      URI.escape location
     end
 
     def download_url
