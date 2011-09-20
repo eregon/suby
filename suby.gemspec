@@ -14,5 +14,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rubyzip2'
   s.add_dependency 'term-ansicolor'
 
-  s.version = '0.1.1'
+  s.version = '0.1.2'
 end
