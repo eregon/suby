@@ -12,11 +12,11 @@ module Suby
     attr_reader :show, :season, :episode, :file, :lang
 
     def initialize(file, *args)
-      @file = file
+      @file = Path(file)
       @lang = (args.last || 'en').to_sym
       case args.size
       when 0..1
-        @show, @season, @episode = FilenameParser.parse(file)
+        @show, @season, @episode = FilenameParser.parse(@file)
       when 3..4
         @show, @season, @episode = args
       else
@@ -85,21 +85,17 @@ module Suby
       format = self.class::FORMAT
       case format
       when :file
-        open(sub_name(contents), 'wb') { |f| f.write contents }
+        sub_name(contents).write contents
       when :zip
-        open(TEMP_ARCHIVE_NAME, 'wb') { |f| f.write contents }
-        Suby.extract_sub_from_archive(TEMP_ARCHIVE_NAME, format, basename)
+        TEMP_ARCHIVE.write contents
+        Suby.extract_sub_from_archive(TEMP_ARCHIVE, format, file)
       else
         raise "unknown subtitles format: #{format}"
       end
     end
 
-    def basename
-      File.basename(file, File.extname(file))
-    end
-
     def sub_name(contents)
-      basename + sub_extension(contents)
+      file.sub_ext sub_extension(contents)
     end
 
     def sub_extension(contents)

@@ -1,3 +1,5 @@
+require 'epath'
+
 gem 'rubyzip2'
 require 'zip'
 
@@ -9,18 +11,18 @@ module Suby
   NotFoundError = Class.new StandardError
   DownloaderError = Class.new StandardError
 
-  SUB_EXTENSIONS = %w[srt sub].map { |ext| ".#{ext}" }
-  TEMP_ARCHIVE_NAME = '__archive__'
+  SUB_EXTENSIONS = %w[srt sub]
+  TEMP_ARCHIVE = Path('__archive__')
 
   class << self
     include Interface
 
     def download_subtitles(files, options = {})
       files.each { |file|
-        next if File.directory?(file) or SUB_EXTENSIONS.include?(File.extname(file))
+        file = Path(file)
+        next if file.directory? or SUB_EXTENSIONS.include?(file.ext)
         next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
-          st = File.basename(file, File.extname(file)) + ext
-          File.exist? st and File.size(st) > 0
+          f = file.replace_extension(ext) and f.exist? and f.size > 0
         }
         download_subtitles_for_file(file, options)
       }
@@ -57,23 +59,22 @@ module Suby
       end
     end
 
-    def extract_sub_from_archive(archive, format, basename)
+    def extract_sub_from_archive(archive, format, file)
       case format
       when :zip
-        Zip::ZipFile.open(archive) { |zip|
+        Zip::ZipFile.open(archive.to_s) { |zip|
           sub = zip.entries.find { |entry|
-            entry.to_s =~ /#{Regexp.union SUB_EXTENSIONS}$/
+            entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
           }
           raise "no subtitles in #{archive}" unless sub
-          name = basename + File.extname(sub.to_s)
-          sub.extract(name)
+          name = file.replace_extension(Path(sub.to_s).ext)
+          sub.extract(name.to_s)
         }
       else
         raise "unknown archive type (#{archive})"
       end
     ensure
-      # Cleaning
-      File.unlink archive if File.exist? archive
+      archive.unlink if archive.exist?
     end
   end
 end

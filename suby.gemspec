@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.executables = ['suby']
 
   s.required_ruby_version = '>= 1.9.2'
+  s.add_dependency 'epath'
   s.add_dependency 'nokogiri'
   s.add_dependency 'rubyzip2'
   s.add_dependency 'term-ansicolor'
