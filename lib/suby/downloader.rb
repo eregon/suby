@@ -5,7 +5,7 @@ require 'nokogiri'
 module Suby
   class Downloader
     DOWNLOADERS = []
-    def self.add(downloader)
+    def self.inherited(downloader)
       DOWNLOADERS << downloader
     end
 
