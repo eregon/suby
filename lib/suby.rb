@@ -1,9 +1,9 @@
+gem 'rubyzip2'
+require 'zip'
+
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
 require_relative 'suby/interface'
-
-gem 'rubyzip2'
-require 'zip'
 
 module Suby
   NotFoundError = Class.new StandardError
