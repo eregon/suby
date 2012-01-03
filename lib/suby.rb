@@ -1,5 +1,3 @@
-require_relative 'suby/downloader_error'
-require_relative 'suby/not_found_error'
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
 require_relative 'suby/interface'
@@ -8,6 +6,9 @@ gem 'rubyzip2'
 require 'zip'
 
 module Suby
+  NotFoundError = Class.new StandardError
+  DownloaderError = Class.new StandardError
+
   SUB_EXTENSIONS = %w[srt sub].map { |ext| ".#{ext}" }
   TEMP_ARCHIVE_NAME = '__archive__'
 
