@@ -100,9 +100,9 @@ module Suby
 
     def sub_extension(contents)
       if contents[0..10] =~ /1\r?\n/
-        '.srt'
+        'srt'
       else
-        '.sub'
+        'sub'
       end
     end
   end
