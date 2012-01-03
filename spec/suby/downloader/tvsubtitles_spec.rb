@@ -1,7 +1,7 @@
 require_relative '../../spec_helper'
 
 describe Suby::Downloader::TVSubtitles do
-  file = 'How I Met Your Mother 3x9 - Slapsgiving.mkv'
+  file = Path('How I Met Your Mother 3x9 - Slapsgiving.mkv')
   downloader = Suby::Downloader::TVSubtitles.new(file)
   downloader_fr = Suby::Downloader::TVSubtitles.new(file, :fr)
 
@@ -29,22 +29,22 @@ describe Suby::Downloader::TVSubtitles do
   end
 
   it 'fails gently when the show does not exist' do
-    d = Suby::Downloader::TVSubtitles.new('Not Existing Show 1x1.mkv')
+    d = Suby::Downloader::TVSubtitles.new(Path('Not Existing Show 1x1.mkv'))
     -> { d.show_url }.should raise_error(Suby::NotFoundError, "show not found")
   end
 
   it 'fails gently when the season does not exist' do
-    d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 99x1.mkv')
+    d = Suby::Downloader::TVSubtitles.new(Path('How I Met Your Mother 99x1.mkv'))
     -> { d.episode_url }.should raise_error(Suby::NotFoundError, "season not found")
   end
 
   it 'fails gently when the episode does not exist' do
-    d = Suby::Downloader::TVSubtitles.new('How I Met Your Mother 3x99.mkv')
+    d = Suby::Downloader::TVSubtitles.new(Path('How I Met Your Mother 3x99.mkv'))
     -> { d.episode_url }.should raise_error(Suby::NotFoundError, "episode not found")
   end
 
   it 'fails gently when there is no subtitles available' do
-    d = Suby::Downloader::TVSubtitles.new('Batman: The Animated Series 1x03.mkv')
+    d = Suby::Downloader::TVSubtitles.new(Path('Batman: The Animated Series 1x03.mkv'))
     -> { d.subtitles_url }.should raise_error(Suby::NotFoundError, "no subtitle available")
   end
 end

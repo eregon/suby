@@ -78,7 +78,7 @@ module Suby
     ]
 
     def parse(file)
-      filename = Path(file).basename.to_s
+      filename = file.basename.to_s
       found = FILENAME_PATTERNS.find { |pattern|
         pattern =~ filename
       }

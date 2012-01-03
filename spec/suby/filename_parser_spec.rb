@@ -42,7 +42,7 @@ describe Suby::Downloader do
       "#{dot_show}.0309",
     ].each do |filename|
       it filename do
-        file = filename + ext
+        file = Path(filename + ext)
         Suby::FilenameParser.parse(file).should == [show, season, episode]
       end
     end

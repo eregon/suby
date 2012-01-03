@@ -12,11 +12,11 @@ module Suby
     attr_reader :show, :season, :episode, :file, :lang
 
     def initialize(file, *args)
-      @file = Path(file)
+      @file = file
       @lang = (args.last || 'en').to_sym
       case args.size
       when 0..1
-        @show, @season, @episode = FilenameParser.parse(@file)
+        @show, @season, @episode = FilenameParser.parse(file)
       when 3..4
         @show, @season, @episode = args
       else

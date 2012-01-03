@@ -1,7 +1,7 @@
 require_relative '../../spec_helper'
 
 describe Suby::Downloader::Addic7ed do
-  file = 'The Glee Project 01x03.avi'
+  file = Path('The Glee Project 01x03.avi')
   downloader = Suby::Downloader::Addic7ed.new file
 
   it 'finds the right subtitles' do
@@ -17,7 +17,7 @@ describe Suby::Downloader::Addic7ed do
   end
 
   it 'fails gently when the show or the episode does not exist' do
-    d = Suby::Downloader::Addic7ed.new('Not Existing Show 1x1.mkv')
+    d = Suby::Downloader::Addic7ed.new(Path('Not Existing Show 1x1.mkv'))
     -> { d.download_url }.should raise_error(Suby::NotFoundError, "show/season/episode not found")
   end
 
