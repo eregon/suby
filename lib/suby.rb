@@ -22,7 +22,7 @@ module Suby
         file = Path(file)
         next if file.directory? or SUB_EXTENSIONS.include?(file.ext)
         next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
-          f = file.replace_extension(ext) and f.exist? and f.size > 0
+          f = file.sub_ext(ext) and f.exist? and !f.empty?
         }
         download_subtitles_for_file(file, options)
       }
@@ -67,7 +67,7 @@ module Suby
             entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
           }
           raise "no subtitles in #{archive}" unless sub
-          name = file.replace_extension(Path(sub.to_s).ext)
+          name = file.sub_ext(Path(sub).ext)
           sub.extract(name.to_s)
         }
       else

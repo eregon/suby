@@ -4,7 +4,7 @@ describe Suby::Downloader do
   show = 'How I Met Your Mother'
   season, episode = 3, 9
   title = 'Slapsgiving'
-  ext = '.mkv'
+  ext = 'mkv'
   dot_show = show.tr(' ', '.')
   und_show = show.tr(' ', '_')
 
@@ -42,7 +42,7 @@ describe Suby::Downloader do
       "#{dot_show}.0309",
     ].each do |filename|
       it filename do
-        file = Path(filename + ext)
+        file = Path(filename).add_ext(ext)
         Suby::FilenameParser.parse(file).should == [show, season, episode]
       end
     end
