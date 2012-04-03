@@ -1,7 +1,5 @@
 require 'epath'
-
-gem 'rubyzip2'
-require 'zip'
+require 'zip/zip'
 
 require_relative 'suby/filename_parser'
 require_relative 'suby/downloader'
