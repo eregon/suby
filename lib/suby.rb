@@ -1,9 +1,7 @@
-require 'epath'
+require 'path'
 require 'zip/zip'
 
-require_relative 'suby/filename_parser'
-require_relative 'suby/downloader'
-require_relative 'suby/interface'
+Path.require_tree 'suby', except: %w[downloader/]
 
 module Suby
   NotFoundError = Class.new StandardError

@@ -108,5 +108,8 @@ module Suby
   end
 end
 
-require_relative 'downloader/tvsubtitles'
-require_relative 'downloader/addic7ed'
+# Defines downloader order
+%w[
+    tvsubtitles
+    addic7ed
+  ].each { |downloader| require_relative "downloader/#{downloader}" }
