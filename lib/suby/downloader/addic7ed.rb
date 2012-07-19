@@ -5,7 +5,8 @@ module Suby
     LANG_IDS = {
       en: 1,
       es: 5,
-      fr: 8
+      fr: 8,
+      bg: 35
     }
     FILTER_IGNORED = "Couldn't find any subs with the specified language. " +
                      "Filter ignored"
