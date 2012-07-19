@@ -3,10 +3,11 @@ module Suby
     SITE = 'www.addic7ed.com'
     FORMAT = :file
     LANG_IDS = {
-      en: 1,
-      es: 5,
-      fr: 8,
-      bg: 35
+      en:  1, es:  5, it:  7, fr:  8, pt: 10, de: 11, ca: 12, eu: 13, cs: 14,
+      gl: 15, tr: 16, nl: 17, sv: 18, ru: 19, hu: 20, pl: 21, sl: 22, he: 23,
+      zh: 24, sk: 25, ro: 26, el: 27, fi: 28, no: 29, da: 30, hr: 31, ja: 32,
+      bg: 35, sr: 36, id: 37, ar: 38, ms: 40, ko: 42, fa: 43, bs: 44, vi: 45,
+      th: 46, bn: 47
     }
     FILTER_IGNORED = "Couldn't find any subs with the specified language. " +
                      "Filter ignored"
