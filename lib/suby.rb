@@ -17,13 +17,15 @@ module Suby
     def download_subtitles(files, options = {})
       files.each { |file|
         file = Path(file)
-        next download_subtitles(file.children, options) if file.dir?
-        next if SUB_EXTENSIONS.include?(file.ext)
-        next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
-          f = file.sub_ext(ext) and f.exist? and !f.empty?
-        }
-        next if file.exist? and !video?(file)
-        download_subtitles_for_file(file, options)
+        if file.dir?
+          download_subtitles(file.children, options)
+        elsif SUB_EXTENSIONS.include?(file.ext)
+          # ignore already downloaded subtitles
+        elsif SUB_EXTENSIONS.any? { |ext| f = file.sub_ext(ext) and f.exist? and !f.empty? }
+          puts "Skipping: #{file}"
+        elsif !file.exist? or video?(file)
+          download_subtitles_for_file(file, options)
+        end
       }
     end
 
