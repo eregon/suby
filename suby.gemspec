@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri'
   s.add_dependency 'rubyzip'
   s.add_dependency 'term-ansicolor'
+  s.add_dependency 'mime-types', '>= 1.19'
 
   s.version = '0.2.0'
 end
