@@ -1,5 +1,6 @@
 require 'path'
 require 'zip/zip'
+require 'mime/types'
 
 Path.require_tree 'suby', except: %w[downloader/]
 
@@ -16,12 +17,18 @@ module Suby
     def download_subtitles(files, options = {})
       files.each { |file|
         file = Path(file)
-        next if file.directory? or SUB_EXTENSIONS.include?(file.ext)
+        next download_subtitles(file.children, options) if file.directory?
+        next unless is_video?(file.path)
         next puts "Skipping: #{file}" if SUB_EXTENSIONS.any? { |ext|
           f = file.sub_ext(ext) and f.exist? and !f.empty?
         }
         download_subtitles_for_file(file, options)
       }
+    end
+
+    def is_video?(file_path)
+      type = MIME::Types.type_for(file_path).first
+      not type.nil? and type.media_type == "video"
     end
 
     def download_subtitles_for_file(file, options)
