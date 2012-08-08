@@ -30,8 +30,7 @@ module Suby
     end
 
     def video?(file)
-      type = MIME::Types.type_for(file.path).first
-      type and type.media_type == "video"
+      MIME::Types.type_for(file.path).map(&:media_type).include? "video"
     end
 
     def download_subtitles_for_file(file, options)
