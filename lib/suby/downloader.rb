@@ -1,6 +1,7 @@
 require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
+require 'xmlrpc/client'
 
 module Suby
   class Downloader
@@ -112,4 +113,5 @@ end
 %w[
     tvsubtitles
     addic7ed
+    opensubtitles
   ].each { |downloader| require_relative "downloader/#{downloader}" }
