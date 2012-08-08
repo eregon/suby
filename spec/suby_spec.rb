@@ -15,4 +15,13 @@ describe Suby do
       end
     end
   end
+
+  it 'can detect videos' do
+    %w[avi mp4 mkv].each { |ext|
+      Suby.should be_a_video(Path("file").add_ext(ext))
+    }
+    %w[txt srt sub].each { |ext|
+      Suby.should_not be_a_video(Path("file").add_ext(ext))
+    }
+  end
 end
