@@ -40,7 +40,7 @@ module Suby
     end
 
     def subtitles_search_query
-      [{'moviehash' => MovieHasher.compute_hash(@file.path), 'moviebytesize' => @file.size,
+      [{'moviehash' => MovieHasher.compute_hash(@file.path), 'moviebytesize' => @file.size.to_s,
         'sublanguageid' => language(lang)}]
     end
 
