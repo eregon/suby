@@ -34,6 +34,10 @@ module Suby
       @http ||= Net::HTTP.new(self.class::SITE).start
     end
 
+    def xmlrpc
+      @xmlrpc ||= XMLRPC::Client.new(self.class::SITE, self.class::XMLRPC_PATH)
+    end
+
     def get(path, initheader = {}, parse_response = true)
       response = http.get(path, initheader)
       if parse_response
