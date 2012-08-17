@@ -110,7 +110,25 @@ module Suby
         'sub'
       end
     end
+
+    def imdbid
+      @imdbid ||= convert_to_utf8(find_nfo_file.read)[/imdb\.[^\/]+\/title\/tt(\d+)/i, 1]
+    end
+
+    def find_nfo_file
+      @file.dir.children.find { |file| file.ext == "nfo" }
+    end
+
+    def convert_to_utf8(content)
+      if content.valid_encoding?
+        content
+      else
+        content.force_encoding("ISO-8859-1").encode("UTF-8")
+      end
+    end
+
   end
+
 end
 
 # Defines downloader order

@@ -8,7 +8,10 @@ module Suby
     USERNAME = ''
     PASSWORD = ''
     LOGIN_LANGUAGE = 'eng'
-    USER_AGENT = 'SubDownloader 2.0.10'
+    USER_AGENT = 'OS Test User Agent'
+
+    SEARCH_QUERIES_ORDER = [:hash, :name] #There is also search using imdbid but i dont think it usefull as it
+                                          #returns subtitles for many different versions
 
     # OpenSubtitles needs ISO 639-2 language codes for subtitles search
     # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
@@ -20,13 +23,18 @@ module Suby
     }
     LANG_MAPPING.default = 'all'
 
-    def subtitles_url(query = subtitles_search_query)
-      subs = search_subtitles(query)['data']
+    def subtitles_url
+      for type in SEARCH_QUERIES_ORDER
+        subs = search_subtitles(search_query(type))['data']
+        break if subs
+      end
       raise NotFoundError, "no subtitle available" unless subs
       subs.first['ZipDownloadLink']
     end
 
     def search_subtitles(query)
+      return {} if query.nil?
+      query = [query] unless query.kind_of? Array
       xmlrpc.call('SearchSubtitles', token, query)
     end
 
@@ -43,10 +51,29 @@ module Suby
       response['token']
     end
 
-    def subtitles_search_query
-      raise NotFoundError, "cant search subtitles for non existing file" unless @file.exist?
-      [{:moviehash => MovieHasher.compute_hash(@file.path), :moviebytesize => @file.size.to_s,
-        :sublanguageid => language(lang)}]
+    def search_query(type = :hash)
+      query = send("search_query_by_#{type}")
+      query.merge(:sublanguageid => language(lang)) unless query.empty?
+    end
+
+    def search_query_by_hash
+      if @file.exist?
+        {:moviehash => MovieHasher.compute_hash(@file.path), :moviebytesize => @file.size.to_s}
+      else
+        {}
+      end
+    end
+
+    def search_query_by_name
+      if @season and @episode
+        {:query => @show, :season => @season, :episode => @episode}
+      else
+        {:query => @file.basename.to_s}
+      end
+    end
+
+    def search_query_by_imdbid
+      {:imdbid => imdbid}
     end
 
     def language(lang)
