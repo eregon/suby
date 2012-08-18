@@ -10,19 +10,16 @@ module Suby
       DOWNLOADERS << downloader
     end
 
-    attr_reader :show, :season, :episode, :file, :lang
+    attr_reader :show, :season, :episode, :video_data, :file, :lang
 
     def initialize(file, *args)
       @file = file
       @lang = (args.last || 'en').to_sym
-      case args.size
-      when 0..1
-        @show, @season, @episode = FilenameParser.parse(file)
-      when 3..4
-        @show, @season, @episode = args
-      else
-        raise ArgumentError, "wrong number of arguments: #{args.size+1} for " +
-                             "(file, [show, season, episode], [lang])"
+      @video_data = FilenameParser.parse(file)
+      if video_data[:type] == :tvshow
+        @show = video_data[:show]
+        @season = video_data[:season]
+        @episode = video_data[:episode]
       end
     end
 
@@ -73,6 +70,9 @@ module Suby
     end
 
     def download
+      unless self.class::SUBTITLE_TYPES.include? video_data[:type]
+        raise NotFoundError, "Skipping, no support for #{video_data[:type].to_s} video type"
+      end
       extract download_url
     end
 

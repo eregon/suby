@@ -4,7 +4,7 @@ module Suby
 
     # from tvnamer @ ab2c6c, with author's agreement, adapted
     # See https://github.com/dbr/tvnamer/blob/master/tvnamer/config_defaults.py
-    FILENAME_PATTERNS = [
+    TVSHOW_PATTERNS = [
       # foo.s0101
       /^(?<show>.+?)
       [ \._\-]
@@ -68,22 +68,21 @@ module Suby
       (?<season>[0-9]{1})
       (?<episode>[0-9]{2})
       [\._ -][^\/]*$/x,
-
-      # foo.0103*
-      /^(?<show>.+)
-      [ \._\-]
-      (?<season>[0-9]{2})
-      (?<episode>[0-9]{2,3})
-      [\._ -][^\/]*$/x
     ]
+    MOVIE_PATTERN = /^(?<movie>.*)[\.|\[|\(| ]{1}(?<year>(?:(?:19|20)[0-9]{2}))/
 
     def parse(file)
       filename = file.basename.to_s
-      found = FILENAME_PATTERNS.find { |pattern|
+      found = TVSHOW_PATTERNS.find { |pattern|
         pattern =~ filename
       }
-      raise "Wrong file format (#{file})" unless found
-      [clean_show_name($~[:show]), $~[:season].to_i, $~[:episode].to_i]
+      if found
+        { type: :tvshow, show: clean_show_name($~[:show]), season: $~[:season].to_i, episode: $~[:episode].to_i }
+      elsif MOVIE_PATTERN =~ filename
+        { type: :movie, name: clean_show_name($~[:movie]), year: $~[:year] }
+      else
+        { type: :unknown, name: filename }
+      end
     end
 
     # from https://github.com/dbr/tvnamer/blob/master/tvnamer/utils.py#L78-95

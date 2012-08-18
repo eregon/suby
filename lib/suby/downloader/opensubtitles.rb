@@ -22,6 +22,7 @@ module Suby
       ms: 'msa', ko: 'kor', fa: 'fas', bs: 'bos', vi: 'vie', th: 'tha', bn: 'ben', no: 'nor'
     }
     LANG_MAPPING.default = 'all'
+    SUBTITLE_TYPES = [:tvshow, :movie, :unknown]
 
     def subtitles_url
       for type in SEARCH_QUERIES_ORDER

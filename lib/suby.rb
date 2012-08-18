@@ -36,10 +36,9 @@ module Suby
 
     def download_subtitles_for_file(file, options)
       begin
-        show, season, episode = FilenameParser.parse(file)
         puts file
         success = Downloader::DOWNLOADERS.find { |downloader_class|
-          try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
+          try_downloader(downloader_class.new(file, options[:lang]))
         }
         error "\nNo downloader could find subtitles for #{file}" unless success
       rescue
