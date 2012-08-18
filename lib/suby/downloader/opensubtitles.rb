@@ -58,19 +58,11 @@ module Suby
     end
 
     def search_query_by_hash
-      if @file.exist?
-        {:moviehash => MovieHasher.compute_hash(@file.path), :moviebytesize => @file.size.to_s}
-      else
-        {}
-      end
+      @file.exist? ? {:moviehash => MovieHasher.compute_hash(file.path), :moviebytesize => file.size.to_s} : {}
     end
 
     def search_query_by_name
-      if @season and @episode
-        {:query => @show, :season => @season, :episode => @episode}
-      else
-        {:query => @file.basename.to_s}
-      end
+      season && episode ? {:query => show, :season => season, :episode => episode} : {:query => file.basename.to_s}
     end
 
     def search_query_by_imdbid
