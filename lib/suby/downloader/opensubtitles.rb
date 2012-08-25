@@ -66,7 +66,7 @@ module Suby
     end
 
     def search_query_by_imdbid
-      {:imdbid => imdbid}
+      imdbid ? {:imdbid => imdbid} : {}
     end
 
     def language(lang)

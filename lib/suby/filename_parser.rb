@@ -69,7 +69,7 @@ module Suby
       (?<episode>[0-9]{2})
       [\._ -][^\/]*$/x,
     ]
-    MOVIE_PATTERN = /^(?<movie>.*)[\.|\[|\(| ]{1}(?<year>(?:(?:19|20)[0-9]{2}))/
+    MOVIE_PATTERN = /^(?<movie>.*)[\[.(| ]{1}(?<year>(?:(?:19|20)[0-9]{2}))/i
 
     def parse(file)
       filename = file.basename.to_s
@@ -79,7 +79,7 @@ module Suby
       if found
         { type: :tvshow, show: clean_show_name($~[:show]), season: $~[:season].to_i, episode: $~[:episode].to_i }
       elsif MOVIE_PATTERN =~ filename
-        { type: :movie, name: clean_show_name($~[:movie]), year: $~[:year] }
+        { type: :movie, name: clean_show_name($~[:movie]), year: $~[:year].to_i }
       else
         { type: :unknown, name: filename }
       end
