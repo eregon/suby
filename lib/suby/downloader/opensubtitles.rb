@@ -58,7 +58,7 @@ module Suby
     end
 
     def search_query_by_hash
-      @file.exist? ? {:moviehash => MovieHasher.compute_hash(file.path), :moviebytesize => file.size.to_s} : {}
+      @file.exist? ? {:moviehash => MovieHasher.compute_hash(file), :moviebytesize => file.size.to_s} : {}
     end
 
     def search_query_by_name

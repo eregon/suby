@@ -3,28 +3,29 @@ module Suby
   module MovieHasher
 
     CHUNK_SIZE = 64 * 1024 # in bytes
+    MASK64 = 0xffffffffffffffff # 2^64 - 1
 
-    def self.compute_hash(filename)
-      filesize = File.size(filename)
+    def self.compute_hash(file)
+      filesize = file.size
       hash = filesize
 
       # Read 64 kbytes, divide up into 64 bits and add each
       # to hash. Do for beginning and end of file.
-      File.open(filename, 'rb') do |f|
+      file.open('rb') do |f|
         # Q = unsigned long long = 64 bit
         f.read(CHUNK_SIZE).unpack("Q*").each do |n|
-          hash = hash + n & 0xffffffffffffffff # to remain as 64 bit number
+          hash = (hash + n) & MASK64
         end
 
         f.seek([0, filesize - CHUNK_SIZE].max, IO::SEEK_SET)
 
         # And again for the end of the file
         f.read(CHUNK_SIZE).unpack("Q*").each do |n|
-          hash = hash + n & 0xffffffffffffffff
+          hash = (hash + n) & MASK64
         end
       end
 
-      sprintf("%016x", hash)
+      "%016x" % hash
     end
   end
 end
