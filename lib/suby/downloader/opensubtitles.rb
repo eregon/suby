@@ -54,19 +54,19 @@ module Suby
 
     def search_query(type = :hash)
       query = send("search_query_by_#{type}")
-      query.merge(:sublanguageid => language(lang)) unless query.empty?
+      query.merge(sublanguageid: language(lang)) unless query.empty?
     end
 
     def search_query_by_hash
-      @file.exist? ? {:moviehash => MovieHasher.compute_hash(file), :moviebytesize => file.size.to_s} : {}
+      @file.exist? ? { moviehash: MovieHasher.compute_hash(file), moviebytesize: file.size.to_s } : {}
     end
 
     def search_query_by_name
-      season && episode ? {:query => show, :season => season, :episode => episode} : {:query => file.basename.to_s}
+      season && episode ? { query: show, season: season, episode: episode } : { query: file.basename.to_s }
     end
 
     def search_query_by_imdbid
-      imdbid ? {:imdbid => imdbid} : {}
+      { imdbid: imdbid } if imdbid
     end
 
     def language(lang)
