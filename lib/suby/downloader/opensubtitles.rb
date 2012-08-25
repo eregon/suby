@@ -26,15 +26,14 @@ module Suby
 
     def subtitles_url
       for type in SEARCH_QUERIES_ORDER
-        subs = search_subtitles(search_query(type))['data']
-        break if subs
+        break if subs = search_subtitles(search_query(type))['data']
       end
       raise NotFoundError, "no subtitle available" unless subs
       subs.first['ZipDownloadLink']
     end
 
     def search_subtitles(query)
-      return {} if query.nil?
+      return {} unless query
       query = [query] unless query.kind_of? Array
       xmlrpc.call('SearchSubtitles', token, query)
     end
@@ -53,12 +52,12 @@ module Suby
     end
 
     def search_query(type = :hash)
-      query = send("search_query_by_#{type}")
-      query.merge(sublanguageid: language(lang)) unless query.empty?
+      return nil unless query = send("search_query_by_#{type}")
+      query.merge(sublanguageid: language(lang))
     end
 
     def search_query_by_hash
-      @file.exist? ? { moviehash: MovieHasher.compute_hash(file), moviebytesize: file.size.to_s } : {}
+      { moviehash: MovieHasher.compute_hash(file), moviebytesize: file.size.to_s } if @file.exist?
     end
 
     def search_query_by_name
