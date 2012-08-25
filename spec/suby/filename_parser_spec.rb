@@ -48,7 +48,7 @@ describe Suby::Downloader do
       },
       {
         examples: [movie_name],
-        expected: { type: :movie, name: "Somemovie", year: "2002" }
+        expected: { type: :movie, name: "Somemovie", year: 2002 }
       },
       {
         examples: [unknown_name],
