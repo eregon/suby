@@ -112,7 +112,7 @@ module Suby
     def imdbid
       @imdbid ||= begin
         nfo_file = find_nfo_file
-        nfo_file ? convert_to_utf8(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] : nil
+        convert_to_utf8(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] if nfo_file
       end
     end
 

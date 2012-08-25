@@ -69,7 +69,7 @@ module Suby
       (?<episode>[0-9]{2})
       [\._ -][^\/]*$/x,
     ]
-    MOVIE_PATTERN = /^(?<movie>.*)[\[.(| ]{1}(?<year>(?:(?:19|20)[0-9]{2}))/i
+    MOVIE_PATTERN = /^(?<movie>.*)[.\[( ](?<year>(?:19|20)\d{2})/
 
     def parse(file)
       filename = file.basename.to_s

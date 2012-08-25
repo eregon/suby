@@ -9,12 +9,12 @@ describe Suby::Downloader::OpenSubtitles do
   it 'finds the right subtitles' do
     response = downloader.search_subtitles(correct_query)['data']
     response.should_not be_false
-    response.first['MovieName'].should == "\"Breaking Bad\" Fifty-One"
+    response.first['MovieName'].should == '"Breaking Bad" Fifty-One'
   end
 
   it 'finds the right download link' do
     url = downloader.subtitles_url
-    url.should match(/http(s)?:\/\/.*opensubtitles.org\/en\/download\/.*/)
+    url.should match(%r{http(s)?://.*opensubtitles.org/en/download/.*})
   end
 
   it "doesn't find anything for bad query" do
@@ -23,7 +23,7 @@ describe Suby::Downloader::OpenSubtitles do
   end
 
   it "gets right token" do
-    downloader.token.should match(/[a-z0-9]{26}/)
+    downloader.token.should match(/\A[a-z0-9]{26}\z/)
   end
 
   it 'fails gently when there is no subtitles available' do
