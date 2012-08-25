@@ -13,6 +13,10 @@ option_parser = OptionParser.new do |opts|
     options[:lang] = lang
   end
 
+  opts.on '-f', '--force', 'Force subtitles download even if already exists' do |lang|
+    options[:force] = true
+  end
+
   opts.on '-h', '--help', 'Show usage' do
     puts opts
     exit

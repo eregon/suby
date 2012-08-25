@@ -12,6 +12,8 @@ module Suby
     FILTER_IGNORED = "Couldn't find any subs with the specified language. " +
                      "Filter ignored"
 
+    SUBTITLE_TYPES = [:tvshow]
+
     def subtitles_url
       "/serie/#{CGI.escape show}/#{season}/#{episode}/#{LANG_IDS[lang]}"
     end

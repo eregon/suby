@@ -15,13 +15,14 @@ module Suby
     include Interface
 
     def download_subtitles(files, options = {})
+      Zip.options[:on_exists_proc] = options[:force]
       files.each { |file|
         file = Path(file)
         if file.dir?
           download_subtitles(file.children, options)
         elsif SUB_EXTENSIONS.include?(file.ext)
           # ignore already downloaded subtitles
-        elsif SUB_EXTENSIONS.any? { |ext| f = file.sub_ext(ext) and f.exist? and !f.empty? }
+        elsif !options[:force] and SUB_EXTENSIONS.any? { |ext| f = file.sub_ext(ext) and f.exist? and !f.empty? }
           puts "Skipping: #{file}"
         elsif !file.exist? or video?(file)
           download_subtitles_for_file(file, options)
@@ -35,10 +36,9 @@ module Suby
 
     def download_subtitles_for_file(file, options)
       begin
-        show, season, episode = FilenameParser.parse(file)
         puts file
         success = Downloader::DOWNLOADERS.find { |downloader_class|
-          try_downloader(downloader_class.new(file, show, season, episode, options[:lang]))
+          try_downloader(downloader_class.new(file, options[:lang]))
         }
         error "\nNo downloader could find subtitles for #{file}" unless success
       rescue

@@ -1,6 +1,7 @@
 require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
+require 'xmlrpc/client'
 
 module Suby
   class Downloader
@@ -9,19 +10,16 @@ module Suby
       DOWNLOADERS << downloader
     end
 
-    attr_reader :show, :season, :episode, :file, :lang
+    attr_reader :show, :season, :episode, :video_data, :file, :lang
 
     def initialize(file, *args)
       @file = file
       @lang = (args.last || 'en').to_sym
-      case args.size
-      when 0..1
-        @show, @season, @episode = FilenameParser.parse(file)
-      when 3..4
-        @show, @season, @episode = args
-      else
-        raise ArgumentError, "wrong number of arguments: #{args.size+1} for " +
-                             "(file, [show, season, episode], [lang])"
+      @video_data = FilenameParser.parse(file)
+      if video_data[:type] == :tvshow
+        @show = video_data[:show]
+        @season = video_data[:season]
+        @episode = video_data[:episode]
       end
     end
 
@@ -31,6 +29,10 @@ module Suby
 
     def http
       @http ||= Net::HTTP.new(self.class::SITE).start
+    end
+
+    def xmlrpc
+      @xmlrpc ||= XMLRPC::Client.new(self.class::SITE, self.class::XMLRPC_PATH)
     end
 
     def get(path, initheader = {}, parse_response = true)
@@ -68,6 +70,9 @@ module Suby
     end
 
     def download
+      unless self.class::SUBTITLE_TYPES.include? video_data[:type]
+        raise NotFoundError, "Skipping, no support for #{video_data[:type].to_s} video type"
+      end
       extract download_url
     end
 
@@ -105,11 +110,33 @@ module Suby
         'sub'
       end
     end
+
+    def imdbid
+      @imdbid ||= begin
+        nfo_file = find_nfo_file
+        nfo_file ? convert_to_utf8(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] : nil
+      end
+    end
+
+    def find_nfo_file
+      @file.dir.children.find { |file| file.ext == "nfo" }
+    end
+
+    def convert_to_utf8(content)
+      if content.valid_encoding?
+        content
+      else
+        content.force_encoding("ISO-8859-1").encode("UTF-8")
+      end
+    end
+
   end
+
 end
 
 # Defines downloader order
 %w[
     tvsubtitles
     addic7ed
+    opensubtitles
   ].each { |downloader| require_relative "downloader/#{downloader}" }
