@@ -17,9 +17,7 @@ module Suby
       @lang = (args.last || 'en').to_sym
       @video_data = FilenameParser.parse(file)
       if video_data[:type] == :tvshow
-        @show = video_data[:show]
-        @season = video_data[:season]
-        @episode = video_data[:episode]
+        @show, @season, @episode = video_data.values_at(:show, :season, :episode)
       end
     end
 
