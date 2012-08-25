@@ -126,7 +126,7 @@ module Suby
       if content.valid_encoding?
         content
       else
-        content.force_encoding("ISO-8859-1").encode("UTF-8")
+        content.encode("UTF-8", "ISO-8859-1")
       end
     end
 
