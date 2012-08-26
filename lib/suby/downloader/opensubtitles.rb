@@ -57,7 +57,7 @@ module Suby
     end
 
     def search_query_by_hash
-      { moviehash: MovieHasher.compute_hash(file), moviebytesize: file.size.to_s } if @file.exist?
+      { moviehash: MovieHasher.compute_hash(file), moviebytesize: file.size.to_s } if file.exist?
     end
 
     def search_query_by_name
