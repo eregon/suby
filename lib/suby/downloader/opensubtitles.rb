@@ -15,12 +15,13 @@ module Suby
                                           #returns subtitles for many different versions
 
     # OpenSubtitles needs ISO 639-2 language codes for subtitles search
+    # sr: scc instead of srp seems the exception
     # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
     LANG_MAPPING = {
-      en: 'eng', es: 'spa', it: 'ita', fr: 'fra', pt: 'por', de: 'deu', ca: 'cat', eu: 'eus', cs: 'ces', gl: 'glg',
-      tr: 'tur', nl: 'nld', sv: 'swe', ru: 'rus', hu: 'hun', pl: 'pol', sl: 'slv', he: 'heb', zh: 'zho', sk: 'slk',
-      ro: 'ron', el: 'ell', fi: 'fin', da: 'dan', hr: 'hrv', ja: 'jpn', bg: 'bul', sr: 'srp', id: 'ind', ar: 'ara',
-      ms: 'msa', ko: 'kor', fa: 'fas', bs: 'bos', vi: 'vie', th: 'tha', bn: 'ben', no: 'nor'
+      en: 'eng', es: 'spa', it: 'ita', fr: 'fre', pt: 'por', de: 'ger', ca: 'cat', eu: 'baq', cs: 'cze', gl: 'glg',
+      tr: 'tur', nl: 'dut', sv: 'swe', ru: 'rus', hu: 'hun', pl: 'pol', sl: 'slv', he: 'heb', zh: 'chi', sk: 'slo',
+      ro: 'rum', el: 'ell', fi: 'fin', da: 'dan', hr: 'hrv', ja: 'jpn', bg: 'bul', sr: 'scc', id: 'ind', ar: 'ara',
+      ms: 'may', ko: 'kor', fa: 'per', bs: 'bos', vi: 'vie', th: 'tha', bn: 'ben', no: 'nor'
     }
     LANG_MAPPING.default = 'all'
 
