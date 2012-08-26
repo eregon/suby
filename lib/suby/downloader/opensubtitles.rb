@@ -62,7 +62,7 @@ module Suby
     end
 
     def search_query_by_name
-      season && episode ? { query: show, season: season, episode: episode } : { query: file.basename.to_s }
+      season && episode ? { query: show, season: season, episode: episode } : { query: file.base.to_s }
     end
 
     def search_query_by_imdbid
