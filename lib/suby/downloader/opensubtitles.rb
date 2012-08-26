@@ -18,10 +18,12 @@ module Suby
     # sr: scc instead of srp seems the exception
     # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
     LANG_MAPPING = {
-      en: 'eng', es: 'spa', it: 'ita', fr: 'fre', pt: 'por', de: 'ger', ca: 'cat', eu: 'baq', cs: 'cze', gl: 'glg',
-      tr: 'tur', nl: 'dut', sv: 'swe', ru: 'rus', hu: 'hun', pl: 'pol', sl: 'slv', he: 'heb', zh: 'chi', sk: 'slo',
-      ro: 'rum', el: 'ell', fi: 'fin', da: 'dan', hr: 'hrv', ja: 'jpn', bg: 'bul', sr: 'scc', id: 'ind', ar: 'ara',
-      ms: 'may', ko: 'kor', fa: 'per', bs: 'bos', vi: 'vie', th: 'tha', bn: 'ben', no: 'nor'
+      ar: "ara", bg: "bul", bn: "ben", br: "bre", bs: "bos", ca: "cat", cs: "cze", da: "dan", de: "ger", el: "ell",
+      en: "eng", eo: "epo", es: "spa", et: "est", eu: "baq", fa: "per", fi: "fin", fr: "fre", gl: "glg", he: "heb",
+      hi: "hin", hr: "hrv", hu: "hun", hy: "arm", id: "ind", is: "ice", it: "ita", ja: "jpn", ka: "geo", kk: "kaz",
+      km: "khm", ko: "kor", lb: "ltz", lt: "lit", lv: "lav", mk: "mac", mn: "mon", ms: "may", nl: "dut", no: "nor",
+      oc: "oci", pb: "pob", pl: "pol", pt: "por", ro: "rum", ru: "rus", si: "sin", sk: "slo", sl: "slv", sq: "alb",
+      sr: "scc", sv: "swe", sw: "swa", th: "tha", tl: "tgl", tr: "tur", uk: "ukr", ur: "urd", vi: "vie", zh: "chi"
     }
     LANG_MAPPING.default = 'all'
 
