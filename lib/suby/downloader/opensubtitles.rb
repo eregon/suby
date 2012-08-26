@@ -4,6 +4,7 @@ module Suby
     SITE = 'api.opensubtitles.org'
     FORMAT = :zip
     XMLRPC_PATH = '/xml-rpc'
+    SUBTITLE_TYPES = [:tvshow, :movie, :unknown]
 
     USERNAME = ''
     PASSWORD = ''
@@ -22,7 +23,6 @@ module Suby
       ms: 'msa', ko: 'kor', fa: 'fas', bs: 'bos', vi: 'vie', th: 'tha', bn: 'ben', no: 'nor'
     }
     LANG_MAPPING.default = 'all'
-    SUBTITLE_TYPES = [:tvshow, :movie, :unknown]
 
     def subtitles_url
       for type in SEARCH_QUERIES_ORDER

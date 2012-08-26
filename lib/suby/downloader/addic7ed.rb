@@ -2,6 +2,8 @@ module Suby
   class Downloader::Addic7ed < Downloader
     SITE = 'www.addic7ed.com'
     FORMAT = :file
+    SUBTITLE_TYPES = [:tvshow]
+
     LANG_IDS = {
       en:  1, es:  5, it:  7, fr:  8, pt: 10, de: 11, ca: 12, eu: 13, cs: 14,
       gl: 15, tr: 16, nl: 17, sv: 18, ru: 19, hu: 20, pl: 21, sl: 22, he: 23,
@@ -11,8 +13,6 @@ module Suby
     }
     FILTER_IGNORED = "Couldn't find any subs with the specified language. " +
                      "Filter ignored"
-
-    SUBTITLE_TYPES = [:tvshow]
 
     def subtitles_url
       "/serie/#{CGI.escape show}/#{season}/#{episode}/#{LANG_IDS[lang]}"

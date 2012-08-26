@@ -3,11 +3,11 @@ module Suby
     SITE = 'www.tvsubtitles.net'
     FORMAT = :zip
     SEARCH_URL = '/search.php'
+    SUBTITLE_TYPES = [:tvshow]
 
     # cache
     SHOW_URLS = {}
     SHOW_PAGES = {}
-    SUBTITLE_TYPES = [:tvshow]
 
     # "Show (2009-2011)" => "Show"
     def clean_show_name show_name
