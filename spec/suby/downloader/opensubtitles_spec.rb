@@ -13,7 +13,7 @@ describe Suby::Downloader::OpenSubtitles do
   end
 
   it 'finds the right download link' do
-    url = downloader.subtitles_url
+    url = downloader.download_url
     url.should match(%r{http(s)?://.*opensubtitles.org/en/download/.*})
   end
 

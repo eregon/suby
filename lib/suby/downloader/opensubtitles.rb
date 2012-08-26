@@ -24,7 +24,7 @@ module Suby
     }
     LANG_MAPPING.default = 'all'
 
-    def subtitles_url
+    def download_url
       for type in SEARCH_QUERIES_ORDER
         break if subs = search_subtitles(search_query(type))['data']
       end
@@ -70,10 +70,6 @@ module Suby
 
     def language(lang)
       LANG_MAPPING[lang.to_sym]
-    end
-
-    def download_url
-      @download_url ||= subtitles_url
     end
   end
 end

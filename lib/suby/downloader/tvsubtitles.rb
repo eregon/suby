@@ -84,8 +84,7 @@ module Suby
     end
 
     def download_url
-      @download_url ||= URI.escape '/' +
-                      get_redirection(subtitles_url.sub('subtitle', 'download'))
+      URI.escape '/' + get_redirection(subtitles_url.sub('subtitle', 'download'))
     end
   end
 end
