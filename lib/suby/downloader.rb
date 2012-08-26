@@ -69,7 +69,7 @@ module Suby
 
     def download
       unless self.class::SUBTITLE_TYPES.include? video_data[:type]
-        raise NotFoundError, "Skipping, no support for #{video_data[:type].to_s} video type"
+        raise NotFoundError, "no support for #{video_data[:type]} video type"
       end
       extract download_url
     end
