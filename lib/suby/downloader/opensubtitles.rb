@@ -14,9 +14,9 @@ module Suby
     SEARCH_QUERIES_ORDER = [:hash, :name] #There is also search using imdbid but i dont think it usefull as it
                                           #returns subtitles for many different versions
 
-    # OpenSubtitles needs ISO 639-2 language codes for subtitles search
-    # sr: scc instead of srp seems the exception
-    # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+    # OpenSubtitles needs ISO 639-22B language codes for subtitles search
+    # See http://www.opensubtitles.org/addons/export_languages.php
+    # and http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
     LANG_MAPPING = {
       ar: "ara", bg: "bul", bn: "ben", br: "bre", bs: "bos", ca: "cat", cs: "cze", da: "dan", de: "ger", el: "ell",
       en: "eng", eo: "epo", es: "spa", et: "est", eu: "baq", fa: "per", fi: "fin", fr: "fre", gl: "glg", he: "heb",
