@@ -76,7 +76,7 @@ module Suby
         a = subtitles.css('div.left_articles a').find { |a|
           a.name == 'a' and a[:href].start_with?('/subtitle')
         }
-        raise NotFoundError, "no subtitle available" unless a
+        raise NotFoundError, "no subtitles available" unless a
         url = a[:href]
         raise 'invalid subtitle url' unless url =~ /^\/subtitle-(\d+)\.html/
         url

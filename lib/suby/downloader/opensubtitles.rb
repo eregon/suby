@@ -28,7 +28,7 @@ module Suby
       for type in SEARCH_QUERIES_ORDER
         break if subs = search_subtitles(search_query(type))['data']
       end
-      raise NotFoundError, "no subtitle available" unless subs
+      raise NotFoundError, "no subtitles available" unless subs
       subs.first['ZipDownloadLink']
     end
 

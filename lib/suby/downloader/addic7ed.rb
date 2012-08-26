@@ -31,7 +31,7 @@ module Suby
       body.strip!
       raise NotFoundError, "show/season/episode not found" if body.empty?
       if body.include? FILTER_IGNORED
-        raise NotFoundError, "no subtitle available"
+        raise NotFoundError, "no subtitles available"
       end
       body
     end
