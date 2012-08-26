@@ -73,9 +73,6 @@ module Suby
 
     def parse(file)
       filename = file.basename.to_s
-      found = TVSHOW_PATTERNS.find { |pattern|
-        pattern =~ filename
-      }
       if TVSHOW_PATTERNS.find { |pattern| pattern.match(filename) }
         m = $~
         { type: :tvshow, show: clean_show_name(m[:show]), season: m[:season].to_i, episode: m[:episode].to_i }
