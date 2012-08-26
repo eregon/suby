@@ -2,7 +2,7 @@ module Suby
   # Based on https://github.com/byroot/ruby-osdb/blob/master/lib/osdb/server.rb
   class Downloader::OpenSubtitles < Downloader
     SITE = 'api.opensubtitles.org'
-    FORMAT = :zip
+    FORMAT = :gz
     XMLRPC_PATH = '/xml-rpc'
     SUBTITLE_TYPES = [:tvshow, :movie, :unknown]
 
@@ -33,7 +33,7 @@ module Suby
           @type = type
           break subs
         end
-      }.first['ZipDownloadLink']
+      }.first['SubDownloadLink']
     end
 
     def search_subtitles(query)

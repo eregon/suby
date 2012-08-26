@@ -2,6 +2,8 @@ require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
 require 'xmlrpc/client'
+require 'zlib'
+require 'stringio'
 
 module Suby
   class Downloader
@@ -90,6 +92,14 @@ module Suby
       case format
       when :file
         sub_name(contents).write contents
+      when :gz
+        begin
+          gz = Zlib::GzipReader.new(StringIO.new(contents))
+          contents = gz.read
+          sub_name(contents).write contents
+        ensure
+          gz.close if gz
+        end
       when :zip
         TEMP_ARCHIVE.write contents
         Suby.extract_sub_from_archive(TEMP_ARCHIVE, format, file)
