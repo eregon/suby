@@ -128,8 +128,10 @@ module Suby
       end
     end
 
+    def success_message
+      "Found"
+    end
   end
-
 end
 
 # Defines downloader order

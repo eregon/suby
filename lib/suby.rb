@@ -59,7 +59,7 @@ module Suby
         error "Error: #{error.message}"
         false
       else
-        success "Found"
+        success downloader.success_message
         true
       end
     end

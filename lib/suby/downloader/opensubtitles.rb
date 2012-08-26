@@ -25,11 +25,12 @@ module Suby
     LANG_MAPPING.default = 'all'
 
     def download_url
-      for type in SEARCH_QUERIES_ORDER
-        break if subs = search_subtitles(search_query(type))['data']
-      end
-      raise NotFoundError, "no subtitles available" unless subs
-      subs.first['ZipDownloadLink']
+      SEARCH_QUERIES_ORDER.find(lambda { raise NotFoundError, "no subtitles available" }) { |type|
+        if subs = search_subtitles(search_query(type))['data']
+          @type = type
+          break subs
+        end
+      }.first['ZipDownloadLink']
     end
 
     def search_subtitles(query)
@@ -70,6 +71,10 @@ module Suby
 
     def language(lang)
       LANG_MAPPING[lang.to_sym]
+    end
+
+    def success_message
+      "Found by #{@type}"
     end
   end
 end
