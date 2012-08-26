@@ -21,6 +21,10 @@ module Suby
       end
     end
 
+    def support_video_type?
+      self.class::SUBTITLE_TYPES.include? video_data[:type]
+    end
+
     def to_s
       self.class.name.sub(/^.+::/, '')
     end
@@ -68,9 +72,6 @@ module Suby
     end
 
     def download
-      unless self.class::SUBTITLE_TYPES.include? video_data[:type]
-        raise NotFoundError, "no support for #{video_data[:type]} video type"
-      end
       extract download_url
     end
 

@@ -49,6 +49,7 @@ module Suby
     end
 
     def try_downloader(downloader)
+      return false unless downloader.support_video_type?
       begin
         print "  #{downloader.to_s.ljust(20)}"
         downloader.download
