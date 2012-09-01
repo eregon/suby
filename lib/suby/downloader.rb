@@ -147,7 +147,7 @@ end
 
 # Defines downloader order
 %w[
+    opensubtitles
     tvsubtitles
     addic7ed
-    opensubtitles
   ].each { |downloader| require_relative "downloader/#{downloader}" }
