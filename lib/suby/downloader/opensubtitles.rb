@@ -9,7 +9,7 @@ module Suby
     USERNAME = ''
     PASSWORD = ''
     LOGIN_LANGUAGE = 'eng'
-    USER_AGENT = 'OS Test User Agent'
+    USER_AGENT = 'Suby v0.4'
 
     SEARCH_QUERIES_ORDER = [:hash, :name] #There is also search using imdbid but i dont think it usefull as it
                                           #returns subtitles for many different versions
