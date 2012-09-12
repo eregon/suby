@@ -49,8 +49,8 @@ module Suby
     def login
       response = xmlrpc.call('LogIn', USERNAME, PASSWORD, LOGIN_LANGUAGE, USER_AGENT)
       unless response['status'] == '200 OK'
-        raise DownloaderError "Failed to login with #{USERNAME} : #{PASSWORD}. " +
-                              "Server return code: #{response['status']}"
+        raise DownloaderError, "Failed to login with #{USERNAME}:#{PASSWORD}. " +
+                               "Server return code: #{response['status']}"
       end
       response['token']
     end
