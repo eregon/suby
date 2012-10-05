@@ -91,21 +91,22 @@ module Suby
       format = self.class::FORMAT
       case format
       when :file
-        sub_name(contents).write contents
+        # nothing special to do
       when :gz
         begin
           gz = Zlib::GzipReader.new(StringIO.new(contents))
           contents = gz.read
-          sub_name(contents).write contents
         ensure
           gz.close if gz
         end
       when :zip
         TEMP_ARCHIVE.write contents
-        Suby.extract_sub_from_archive(TEMP_ARCHIVE, format, file)
+        Suby.extract_sub_from_archive(TEMP_ARCHIVE, format, TEMP_SUBTITLES)
+        contents = TEMP_SUBTITLES.read
       else
         raise "unknown subtitles format: #{format}"
       end
+      sub_name(contents).write contents
     end
 
     def sub_name(contents)

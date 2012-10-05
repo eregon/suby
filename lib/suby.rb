@@ -9,7 +9,9 @@ module Suby
   DownloaderError = Class.new StandardError
 
   SUB_EXTENSIONS = %w[srt sub]
-  TEMP_ARCHIVE = Path('__archive__')
+  TMPDIR = Path.tmpdir
+  TEMP_ARCHIVE = TMPDIR / 'archive'
+  TEMP_SUBTITLES = TMPDIR / 'subtitles'
 
   class << self
     include Interface
@@ -28,6 +30,8 @@ module Suby
           download_subtitles_for_file(file, options)
         end
       }
+    ensure
+      TMPDIR.rm_rf
     end
 
     def video?(file)
@@ -73,8 +77,7 @@ module Suby
             entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
           }
           raise "no subtitles in #{archive}" unless sub
-          name = file.sub_ext(Path(sub).ext)
-          sub.extract(name.to_s)
+          sub.extract(file.to_s)
         }
       else
         raise "unknown archive type (#{archive})"
