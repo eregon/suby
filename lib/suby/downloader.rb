@@ -106,7 +106,7 @@ module Suby
       else
         raise "unknown subtitles format: #{format}"
       end
-      sub_name(contents).write contents
+      sub_name(contents).write encode contents
     end
 
     def sub_name(contents)
@@ -124,7 +124,7 @@ module Suby
     def imdbid
       @imdbid ||= begin
         nfo_file = find_nfo_file
-        convert_to_utf8(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] if nfo_file
+        convert_to_utf8_from_latin1(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] if nfo_file
       end
     end
 
@@ -132,16 +132,35 @@ module Suby
       @file.dir.children.find { |file| file.ext == "nfo" }
     end
 
-    def convert_to_utf8(content)
+    def convert_to_utf8_from_latin1(content)
       if content.valid_encoding?
         content
       else
-        content.encode("UTF-8", "ISO-8859-1")
+        enc = content.encoding
+        if content.force_encoding("ISO-8859-1").valid_encoding?
+          yield if block_given?
+          content.encode("UTF-8")
+        else
+          # restore original encoding
+          subtitles.force_encoding(enc)
+        end
       end
     end
 
     def success_message
       "Found"
+    end
+
+    def encode(subtitles)
+      if @lang == :fr
+        convert_to_utf8_from_latin1(subtitles) do
+          def self.success_message
+            "#{super} (transcoded from ISO-8859-1)"
+          end
+        end
+      else
+        subtitles
+      end
     end
   end
 end
