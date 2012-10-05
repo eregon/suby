@@ -45,6 +45,6 @@ describe Suby::Downloader::TVSubtitles do
 
   it 'fails gently when there is no subtitles available' do
     d = Suby::Downloader::TVSubtitles.new(Path('Batman: The Animated Series 1x03.mkv'))
-    -> { d.subtitles_url }.should raise_error(Suby::NotFoundError, "no subtitle available")
+    -> { d.subtitles_url }.should raise_error(Suby::NotFoundError, "no subtitles available")
   end
 end

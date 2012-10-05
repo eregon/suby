@@ -2,6 +2,8 @@ module Suby
   class Downloader::Addic7ed < Downloader
     SITE = 'www.addic7ed.com'
     FORMAT = :file
+    SUBTITLE_TYPES = [:tvshow]
+
     LANG_IDS = {
       en:  1, es:  5, it:  7, fr:  8, pt: 10, de: 11, ca: 12, eu: 13, cs: 14,
       gl: 15, tr: 16, nl: 17, sv: 18, ru: 19, hu: 20, pl: 21, sl: 22, he: 23,
@@ -29,7 +31,7 @@ module Suby
       body.strip!
       raise NotFoundError, "show/season/episode not found" if body.empty?
       if body.include? FILTER_IGNORED
-        raise NotFoundError, "no subtitle available"
+        raise NotFoundError, "no subtitles available"
       end
       body
     end

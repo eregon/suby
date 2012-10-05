@@ -1,6 +1,9 @@
 require 'net/http'
 require 'cgi/util'
 require 'nokogiri'
+require 'xmlrpc/client'
+require 'zlib'
+require 'stringio'
 
 module Suby
   class Downloader
@@ -9,20 +12,19 @@ module Suby
       DOWNLOADERS << downloader
     end
 
-    attr_reader :show, :season, :episode, :file, :lang
+    attr_reader :show, :season, :episode, :video_data, :file, :lang
 
     def initialize(file, *args)
       @file = file
       @lang = (args.last || 'en').to_sym
-      case args.size
-      when 0..1
-        @show, @season, @episode = FilenameParser.parse(file)
-      when 3..4
-        @show, @season, @episode = args
-      else
-        raise ArgumentError, "wrong number of arguments: #{args.size+1} for " +
-                             "(file, [show, season, episode], [lang])"
+      @video_data = FilenameParser.parse(file)
+      if video_data[:type] == :tvshow
+        @show, @season, @episode = video_data.values_at(:show, :season, :episode)
       end
+    end
+
+    def support_video_type?
+      self.class::SUBTITLE_TYPES.include? video_data[:type]
     end
 
     def to_s
@@ -31,6 +33,10 @@ module Suby
 
     def http
       @http ||= Net::HTTP.new(self.class::SITE).start
+    end
+
+    def xmlrpc
+      @xmlrpc ||= XMLRPC::Client.new(self.class::SITE, self.class::XMLRPC_PATH)
     end
 
     def get(path, initheader = {}, parse_response = true)
@@ -86,6 +92,14 @@ module Suby
       case format
       when :file
         sub_name(contents).write contents
+      when :gz
+        begin
+          gz = Zlib::GzipReader.new(StringIO.new(contents))
+          contents = gz.read
+          sub_name(contents).write contents
+        ensure
+          gz.close if gz
+        end
       when :zip
         TEMP_ARCHIVE.write contents
         Suby.extract_sub_from_archive(TEMP_ARCHIVE, format, file)
@@ -105,11 +119,35 @@ module Suby
         'sub'
       end
     end
+
+    def imdbid
+      @imdbid ||= begin
+        nfo_file = find_nfo_file
+        convert_to_utf8(nfo_file.read)[%r!imdb\.[^/]+/title/tt(\d+)!i, 1] if nfo_file
+      end
+    end
+
+    def find_nfo_file
+      @file.dir.children.find { |file| file.ext == "nfo" }
+    end
+
+    def convert_to_utf8(content)
+      if content.valid_encoding?
+        content
+      else
+        content.encode("UTF-8", "ISO-8859-1")
+      end
+    end
+
+    def success_message
+      "Found"
+    end
   end
 end
 
 # Defines downloader order
 %w[
+    opensubtitles
     tvsubtitles
     addic7ed
   ].each { |downloader| require_relative "downloader/#{downloader}" }
