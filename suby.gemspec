@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'term-ansicolor'
   s.add_dependency 'mime-types', '>= 1.19'
 
-  s.version = '0.3.1'
+  s.version = '0.4.0'
 end
