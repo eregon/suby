@@ -74,7 +74,11 @@ module Suby
     end
 
     def download
-      extract download_url
+      begin
+        extract download_url
+      rescue Net::ReadTimeout => error
+        raise Suby::DownloaderError, error.message
+      end
     end
 
     def subtitles(url_or_response = download_url)
