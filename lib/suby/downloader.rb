@@ -36,7 +36,10 @@ module Suby
     end
 
     def xmlrpc
+      return @xmlrpc if @xmlrpc
       @xmlrpc ||= XMLRPC::Client.new(self.class::SITE, self.class::XMLRPC_PATH)
+      @xmlrpc.http_header_extra = { 'accept-encoding' => 'identity' } if RbConfig::CONFIG['MAJOR'] == '2'
+      @xmlrpc
     end
 
     def get(path, initheader = {}, parse_response = true)
