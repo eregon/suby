@@ -1,5 +1,5 @@
 require 'path'
-require 'zip/zip'
+require 'zip'
 require 'mime/types'
 
 Path.require_tree 'suby', except: %w[downloader/]
@@ -17,7 +17,7 @@ module Suby
     include Interface
 
     def download_subtitles(files, options = {})
-      Zip.options[:on_exists_proc] = options[:force]
+      Zip.on_exists_proc = options[:force]
       files.each { |file|
         file = Path(file)
         if file.dir?
@@ -72,7 +72,7 @@ module Suby
     def extract_sub_from_archive(archive, format, file)
       case format
       when :zip
-        Zip::ZipFile.open(archive.to_s) { |zip|
+        Zip::File.open(archive.to_s) { |zip|
           sub = zip.entries.find { |entry|
             entry.to_s =~ /\.#{Regexp.union SUB_EXTENSIONS}$/
           }
