@@ -42,6 +42,9 @@ module Suby
     end
 
     def get(path, initheader = {}, parse_response = true)
+      if host = URI.parse(path).host and host != self.class::SITE
+        raise DownloaderError, "Cross-Origin request not supported yet (#{host})"
+      end
       response = http.get(path, initheader)
       if parse_response
         unless Net::HTTPSuccess === response
