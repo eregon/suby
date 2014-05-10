@@ -78,7 +78,9 @@ module Suby
     def download
       begin
         extract download_url
-      rescue Net.const_defined?(:ReadTimeout) ? Net::ReadTimeout : EOFError => error
+      rescue Timeout::Error, Errno::ECONNREFUSED, Errno::EINVAL,
+          Errno::ECONNRESET, EOFError, RuntimeError, Net::HTTPBadResponse,
+          Net::HTTPHeaderSyntaxError, Net::ProtocolError => error
         raise Suby::DownloaderError, error.message
       end
     end
