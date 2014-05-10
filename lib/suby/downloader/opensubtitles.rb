@@ -1,8 +1,9 @@
 module Suby
   # Based on https://github.com/byroot/ruby-osdb/blob/master/lib/osdb/server.rb
   class Downloader::OpenSubtitles < Downloader
-    SITE = 'api.opensubtitles.org'
+    SITE = 'dl.opensubtitles.org'
     FORMAT = :gz
+    XMLRPC_HOST = 'api.opensubtitles.org'
     XMLRPC_PATH = '/xml-rpc'
     SUBTITLE_TYPES = [:tvshow, :movie, :unknown]
 
