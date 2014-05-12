@@ -4,6 +4,11 @@ require 'mime/types'
 
 Path.require_tree 'suby', except: %w[downloader/]
 
+if RUBY_VERSION =~ /1.9/
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
+
 module Suby
   NotFoundError = Class.new StandardError
   DownloaderError = Class.new StandardError
