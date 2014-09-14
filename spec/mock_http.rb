@@ -11,7 +11,7 @@ class Suby::Downloader
       if data[args]
         data[args]
       else
-        puts "doing the real request: #{meth}(#{args * ', '})"
+        puts "doing the real request: #{meth}(#{args * ', '})" unless ENV["TRAVIS"]
         value = original_method.bind(self).call(*args)
         data[args] = value
         File.write(file, Marshal.dump(data))

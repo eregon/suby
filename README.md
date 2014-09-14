@@ -1,4 +1,4 @@
-# suby
+# suby [![Build Status](https://travis-ci.org/eregon/suby.svg?branch=master)](https://travis-ci.org/eregon/suby)
 
 Find and download subtitles
 
