@@ -3,11 +3,11 @@ require_relative '../../spec_helper'
 describe Suby::Downloader::OpenSubtitles do
   file = Path("breaking.bad.s05e04.hdtv.x264-fqm.mp4")
   downloader = Suby::Downloader::OpenSubtitles.new file
-  correct_query = [{ moviehash: "709b9ff887cf987d", moviebytesize: "308412149", sublanguageid: "eng" }]
-  wrong_query = correct_query.first.merge({ sublanguageid: "wrong_language" })
+  correct_query = { moviehash: "709b9ff887cf987d", moviebytesize: "308412149", sublanguageid: "eng" }
+  wrong_query = correct_query.merge({ sublanguageid: "wrong_language" })
 
   it 'finds the right subtitles' do
-    response = downloader.search_subtitles(correct_query)['data']
+    response = downloader.search_subtitles(correct_query)
     response.should_not be_false
     response.first['MovieName'].should == '"Breaking Bad" Fifty-One'
   end
@@ -18,8 +18,8 @@ describe Suby::Downloader::OpenSubtitles do
   end
 
   it "doesn't find anything for bad query" do
-    response = downloader.search_subtitles(wrong_query)['data']
-    response.should be_false
+    response = downloader.search_subtitles(wrong_query)
+    response.should == []
   end
 
   it "gets right token" do

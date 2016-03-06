@@ -30,7 +30,7 @@ module Suby
 
     def download_url
       SEARCH_QUERIES_ORDER.find(lambda { raise NotFoundError, "no subtitles available" }) { |type|
-        subs = search_subtitles(search_query(type))['data']
+        subs = search_subtitles(search_query(type))
         if subs && !subs.empty? && subs.first['SubDownloadLink']
           @type = type
           break subs
@@ -39,9 +39,13 @@ module Suby
     end
 
     def search_subtitles(query)
-      return {} unless query
-      query = [query] unless query.kind_of? Array
-      xmlrpc.call('SearchSubtitles', token, query)
+      return [] unless query
+      response = xmlrpc.call('SearchSubtitles', token, [query])
+      data = response["data"]
+      return [] unless data
+      data.select { |sub|
+        sub["SubLanguageID"] == query[:sublanguageid]
+      }
     end
 
     def token
