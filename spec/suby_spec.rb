@@ -11,7 +11,8 @@ describe Suby do
       suby = File.expand_path('../../bin/suby', __FILE__)
       Dir.chdir(dir) do
         system suby, file
-        Digest::MD5.hexdigest(File.read(srt)).should == 'd76d57eef776999f2b76c6dfb557b6b5'
+        subs = File.read(srt)
+        subs.should match(/yeah, this is gonna be the best slapsgiving ever./i)
       end
     end
   end
