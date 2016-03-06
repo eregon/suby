@@ -31,7 +31,7 @@ module Suby
     def download_url
       SEARCH_QUERIES_ORDER.find(lambda { raise NotFoundError, "no subtitles available" }) { |type|
         subs = search_subtitles(search_query(type))
-        if subs && !subs.empty? && subs.first['SubDownloadLink']
+        if subs && !subs.empty?
           @type = type
           break subs
         end
@@ -44,7 +44,7 @@ module Suby
       data = response["data"]
       return [] unless data
       data.select { |sub|
-        sub["SubLanguageID"] == query[:sublanguageid]
+        sub["SubDownloadLink"] and sub["SubLanguageID"] == query[:sublanguageid]
       }
     end
 
