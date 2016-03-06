@@ -15,7 +15,8 @@ module Suby
                      "Filter ignored"
 
     def subtitles_url
-      "/serie/#{CGI.escape show}/#{season}/#{episode}/#{LANG_IDS[lang]}"
+      encoded_show = CGI.escape show.tr(' ','_')
+      "/serie/#{encoded_show}/#{season}/#{episode}/#{LANG_IDS[lang]}"
     end
 
     def subtitles_response
