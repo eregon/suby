@@ -12,7 +12,7 @@ describe Suby do
       Dir.chdir(dir) do
         system suby, file
         subs = File.read(srt)
-        subs.should match(/yeah, this is gonna be the best slapsgiving ever./i)
+        subs.should match(/yeah,\s*this\s+is\s+gonna\s+be\s+the\s+best\s+slapsgiving\s+ever/im)
       end
     end
   end

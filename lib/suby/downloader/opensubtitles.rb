@@ -35,7 +35,7 @@ module Suby
           @type = type
           break subs
         end
-      }.first['SubDownloadLink']
+      }.sample['SubDownloadLink']
     end
 
     def search_subtitles(query)
