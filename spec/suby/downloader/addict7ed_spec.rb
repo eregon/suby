@@ -1,12 +1,12 @@
 require_relative '../../spec_helper'
 
 describe Suby::Downloader::Addic7ed do
-  file = Path('The Glee Project 01x03.avi')
+  file = Path('The Big Bang Theory 01x01.avi')
   downloader = Suby::Downloader::Addic7ed.new file
 
   it 'finds the right subtitles' do
     begin
-      downloader.subtitles[0..100].should include "Ellis, best first kiss?"
+      downloader.subtitles[0..100].should include "If a photon is directed through a plane"
     rescue Suby::NotFoundError => e
       if e.message == "download exceeded"
         pending e.message
@@ -22,7 +22,7 @@ describe Suby::Downloader::Addic7ed do
   end
 
   it 'fails gently when there is no subtitles available' do
-    d = Suby::Downloader::Addic7ed.new(file, :es)
-    -> { p d.download_url }.should raise_error(Suby::NotFoundError, "no subtitles available")
+    d = Suby::Downloader::Addic7ed.new(file, :zh)
+    -> { p d.download_url.body }.should raise_error(Suby::NotFoundError, "no subtitles available")
   end
 end
