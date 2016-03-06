@@ -3,7 +3,7 @@ PATH
   specs:
     suby (0.4.5)
       mime-types (~> 1.19)
-      nokogiri (~> 1.6)
+      nokogiri (~> 1.6.7)
       path (~> 1.3)
       rubyzip (~> 1.1)
       term-ansicolor (~> 1.2)
@@ -13,9 +13,9 @@ GEM
   specs:
     diff-lcs (1.2.5)
     mime-types (1.25.1)
-    mini_portile (0.6.0)
-    nokogiri (1.6.2.1)
-      mini_portile (= 0.6.0)
+    mini_portile2 (2.0.0)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
     path (1.3.3)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -25,10 +25,10 @@ GEM
     rspec-expectations (2.14.5)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.6)
-    rubyzip (1.1.3)
-    term-ansicolor (1.3.0)
+    rubyzip (1.2.0)
+    term-ansicolor (1.3.2)
       tins (~> 1.0)
-    tins (1.3.0)
+    tins (1.8.2)
 
 PLATFORMS
   ruby
@@ -36,3 +36,6 @@ PLATFORMS
 DEPENDENCIES
   rspec (~> 2)
   suby!
+
+BUNDLED WITH
+   1.10.6
