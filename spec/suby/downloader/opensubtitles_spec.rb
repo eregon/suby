@@ -23,7 +23,7 @@ describe Suby::Downloader::OpenSubtitles do
   end
 
   it "gets right token" do
-    downloader.token.should match(/\A[a-z0-9]{26}\z/)
+    downloader.token.should match(/\A[a-zA-Z0-9]+\z/)
   end
 
   it 'fails gently when there is no subtitles available' do
