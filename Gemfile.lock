@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    suby (0.4.5)
+    suby (0.4.6)
       mime-types (~> 1.19)
       nokogiri (~> 1.6.7)
       path (~> 1.3)
@@ -38,4 +38,4 @@ DEPENDENCIES
   suby!
 
 BUNDLED WITH
-   1.10.6
+   1.13.6
