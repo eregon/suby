@@ -4,6 +4,12 @@ Find and download subtitles
 
 `suby` is a little script to find and download subtitles for TV series
 
+## Deprecated
+
+This project is no longer maintained. Keeping it working is hard work as upstream APIs keep changing in non-compatible ways.
+
+We recommend using [subliminal](https://github.com/Diaoul/subliminal) instead.
+
 ## Install
 
     gem install suby
